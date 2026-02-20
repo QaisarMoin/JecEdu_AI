@@ -5,6 +5,7 @@ require("dotenv").config();
 
 const authRoutes = require("./routes/authRoutes");
 const testRoutes = require("./routes/testRoutes");
+const noticeRoutes = require("./routes/noticeRoutes");
 
 const app = express();
 
@@ -27,6 +28,7 @@ mongoose.connect("mongodb://localhost:27017")
 
 app.use("/api/auth", authRoutes);
 app.use("/api/test", testRoutes);
+app.use("/api/notices", noticeRoutes);
 
 app.get("/", (req, res) => {
     res.send("SDAS Backend Running");
