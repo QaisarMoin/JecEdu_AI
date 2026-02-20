@@ -32,5 +32,21 @@ router.get(
     attendanceController.getAttendancePercentage
 );
 
+// class attendence
+router.post(
+    "/mark-class",
+    verifyToken,
+    authorizeRoles("faculty"),
+    attendanceController.markClassAttendance
+);
+
+// get subject attendence
+router.get(
+    "/subject/:subjectId",
+    verifyToken,
+    authorizeRoles("faculty"),
+    attendanceController.getSubjectAttendance
+);
+
 
 module.exports = router;

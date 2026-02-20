@@ -56,8 +56,6 @@ exports.getStudentAttendance = async (req, res) => {
 
 };
 
-
-
 // GET ATTENDANCE PERCENTAGE
 exports.getAttendancePercentage = async (req, res) => {
 
@@ -84,6 +82,61 @@ exports.getAttendancePercentage = async (req, res) => {
             present,
             percentage: percentage.toFixed(2)
         });
+
+    } catch (error) {
+
+        res.status(500).json({
+            message: error.message
+        });
+
+    }
+
+};
+
+// MARK FULL CLASS ATTENDANCE
+exports.markClassAttendance = async (req, res) => {
+
+    try {
+
+        const { subjectId, date, attendance } = req.body;
+
+        // attendance = array of students
+
+        const records = attendance.map(item => ({
+            student: item.studentId,
+            subject: subjectId,
+            status: item.status,
+            date
+        }));
+
+        await Attendance.insertMany(records);
+
+        res.status(201).json({
+            message: "Class attendance marked successfully",
+            count: records.length
+        });
+
+    } catch (error) {
+
+        res.status(500).json({
+            message: error.message
+        });
+
+    }
+
+};
+
+exports.getSubjectAttendance = async (req, res) => {
+
+    try {
+
+        const subjectId = req.params.subjectId;
+
+        const attendance = await Attendance.find({
+            subject: subjectId
+        }).populate("student", "name email");
+
+        res.json(attendance);
 
     } catch (error) {
 
