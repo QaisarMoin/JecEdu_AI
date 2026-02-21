@@ -68,6 +68,23 @@ export default function Navbar() {
                     </>
                 )}
 
+                {user?.role === "faculty" && (
+                    <>
+                        &nbsp;&nbsp;
+                        <Link to="/faculty/attendance" style={{ color: "white" }}>
+                            Mark Attendance
+                        </Link>
+                        &nbsp;&nbsp;
+                        <Link to="/faculty/history" style={{ color: "white" }}>
+                            Attendance History
+                        </Link>
+                        &nbsp;&nbsp;
+                        <Link to="/faculty/analytics" style={{ color: "white" }}>
+                            Analytics
+                        </Link>
+                    </>
+                )}
+
             </div>
 
             <div>

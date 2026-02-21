@@ -147,3 +147,110 @@ exports.getSubjectAttendance = async (req, res) => {
     }
 
 };
+
+// GET attendance history by subject
+exports.getAttendanceHistory = async (req, res) => {
+
+    try {
+
+        const subjectId = req.params.subjectId;
+
+        const attendance = await Attendance.find({
+            subject: subjectId
+        })
+        .populate("student", "name email")
+        .sort({ date: -1 });
+
+        // group by date
+        const grouped = {};
+
+        attendance.forEach(record => {
+
+            const date = record.date.toISOString().split("T")[0];
+
+            if (!grouped[date]) {
+                grouped[date] = [];
+            }
+
+            grouped[date].push(record);
+
+        });
+
+        res.json(grouped);
+
+    } catch (error) {
+
+        res.status(500).json({
+            message: error.message
+        });
+
+    }
+
+};
+
+// UPDATE attendance
+exports.updateAttendance = async (req, res) => {
+
+    try {
+
+        const { attendance } = req.body;
+
+        for (let record of attendance) {
+
+            await Attendance.findByIdAndUpdate(
+                record._id,
+                { status: record.status }
+            );
+
+        }
+
+        res.json({
+            message: "Attendance updated successfully"
+        });
+
+    } catch (error) {
+
+        res.status(500).json({
+            message: error.message
+        });
+
+    }
+
+};
+
+exports.getSubjectAnalytics = async (req, res) => {
+
+    try {
+
+        const subjectId = req.params.subjectId;
+
+        const total = await Attendance.countDocuments({
+            subject: subjectId
+        });
+
+        const present = await Attendance.countDocuments({
+            subject: subjectId,
+            status: "present"
+        });
+
+        const absent = total - present;
+
+        const percentage =
+            total === 0 ? 0 : ((present / total) * 100).toFixed(2);
+
+        res.json({
+            total,
+            present,
+            absent,
+            percentage
+        });
+
+    } catch (error) {
+
+        res.status(500).json({
+            message: error.message
+        });
+
+    }
+
+};

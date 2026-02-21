@@ -7,6 +7,9 @@ import Notices from "./pages/Notices";
 import Attendance from "./pages/Attendance";
 import ProtectedRoute from "./components/ProtectedRoute";
 import AdminSubjects from "./pages/AdminSubjects";
+import FacultyAttendance from "./pages/FacultyAttendance";
+import AttendanceHistory from "./pages/AttendanceHistory";
+import AttendanceAnalytics from "./pages/AttendanceAnalytics";
 
 function App() {
 
@@ -53,6 +56,32 @@ function App() {
           element={
             <ProtectedRoute>
               <AdminSubjects />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route path="/faculty/attendance"
+          element={
+            <ProtectedRoute>
+              <FacultyAttendance />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/faculty/history"
+          element={
+            <ProtectedRoute>
+              <AttendanceHistory />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/faculty/analytics"
+          element={
+            <ProtectedRoute>
+              <AttendanceAnalytics />
             </ProtectedRoute>
           }
         />

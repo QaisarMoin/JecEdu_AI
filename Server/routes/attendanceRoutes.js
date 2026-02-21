@@ -48,5 +48,28 @@ router.get(
     attendanceController.getSubjectAttendance
 );
 
+// attendance history
+router.get(
+    "/history/:subjectId",
+    verifyToken,
+    authorizeRoles("faculty"),
+    attendanceController.getAttendanceHistory
+);
+
+// update attendance
+router.put(
+    "/update",
+    verifyToken,
+    authorizeRoles("faculty"),
+    attendanceController.updateAttendance
+);
+
+router.get(
+    "/analytics/:subjectId",
+    verifyToken,
+    authorizeRoles("faculty"),
+    attendanceController.getSubjectAnalytics
+);
+
 
 module.exports = router;

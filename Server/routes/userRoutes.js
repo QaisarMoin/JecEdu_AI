@@ -32,4 +32,34 @@ router.get(
     }
 );
 
+// GET students by department and semester
+router.get(
+    "/students",
+    verifyToken,
+    authorizeRoles("faculty", "admin"),
+    async (req, res) => {
+
+        try {
+
+            const { department, semester } = req.query;
+
+            const students = await User.find({
+                role: "student",
+                department,
+                semester
+            }).select("_id name email");
+
+            res.json(students);
+
+        } catch (error) {
+
+            res.status(500).json({
+                message: error.message
+            });
+
+        }
+
+    }
+);
+
 module.exports = router;
