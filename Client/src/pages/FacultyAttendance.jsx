@@ -125,7 +125,7 @@ export default function FacultyAttendance() {
 
                         <div key={student._id}>
 
-                            {student.name}
+                            {student.rollNo} - {student.name}
 
                             <button
                                 onClick={() =>

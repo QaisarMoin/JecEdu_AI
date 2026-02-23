@@ -23,13 +23,27 @@ const userSchema = new mongoose.Schema({
         required: true
     },
 
+    // student-specific fields
+    rollNo: {
+        type: String,
+        unique: true,
+        sparse: true
+    },
+
     department: {
         type: String
     },
 
     semester: {
         type: Number
+    },
+
+    // faculty-specific fields (future safe)
+    facultyId: {
+        type: String,
+        sparse: true
     }
+
 
 }, { timestamps: true });
 

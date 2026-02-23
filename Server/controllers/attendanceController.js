@@ -1,4 +1,6 @@
 const Attendance = require("../models/Attendance");
+const Subject = require("../models/Subject");
+const User = require("../models/User");
 
 
 // MARK ATTENDANCE (Faculty)
@@ -134,7 +136,7 @@ exports.getSubjectAttendance = async (req, res) => {
 
         const attendance = await Attendance.find({
             subject: subjectId
-        }).populate("student", "name email");
+        }).populate("student", "name email rollNo")
 
         res.json(attendance);
 
@@ -158,7 +160,7 @@ exports.getAttendanceHistory = async (req, res) => {
         const attendance = await Attendance.find({
             subject: subjectId
         })
-        .populate("student", "name email")
+        .populate("student", "name email rollNo")
         .sort({ date: -1 });
 
         // group by date
@@ -244,6 +246,74 @@ exports.getSubjectAnalytics = async (req, res) => {
             absent,
             percentage
         });
+
+    } catch (error) {
+
+        res.status(500).json({
+            message: error.message
+        });
+
+    }
+
+};
+
+// STUDENT ATTENDANCE SUMMARY
+exports.getStudentAttendanceSummary = async (req, res) => {
+
+    try {
+
+        const studentId = req.user.id;
+
+        // Fetch full student from DB
+        const student = await User.findById(studentId);
+
+        if (!student) {
+            return res.status(404).json({
+                message: "Student not found"
+            });
+        }
+
+        console.log("Student department:", student.department);
+        console.log("Student semester:", student.semester);
+
+        const subjects = await Subject.find({
+            department: student.department,
+            semester: student.semester
+        });
+
+        const summary = [];
+
+        for (let subject of subjects) {
+
+            const total = await Attendance.countDocuments({
+                student: studentId,
+                subject: subject._id
+            });
+
+            const present = await Attendance.countDocuments({
+                student: studentId,
+                subject: subject._id,
+                status: "present"
+            });
+
+            const absent = total - present;
+
+            const percentage =
+                total === 0 ? 0 : ((present / total) * 100).toFixed(2);
+
+            summary.push({
+                subjectId: subject._id,
+                subjectName: subject.name,
+                subjectCode: subject.code,
+                total,
+                present,
+                absent,
+                percentage
+            });
+
+        }
+
+        res.json(summary);
 
     } catch (error) {
 

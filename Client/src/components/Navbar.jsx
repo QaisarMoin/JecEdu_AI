@@ -48,6 +48,12 @@ export default function Navbar() {
                         <Link to="/attendance" style={{ color: "white" }}>
                             Attendance
                         </Link>
+
+                        &nbsp;&nbsp;
+
+                        <Link to="/student/dashboard" style={{ color: "white" }}>
+                            My Attendance
+                        </Link>
                     </>
                 )}
 

@@ -10,6 +10,7 @@ import AdminSubjects from "./pages/AdminSubjects";
 import FacultyAttendance from "./pages/FacultyAttendance";
 import AttendanceHistory from "./pages/AttendanceHistory";
 import AttendanceAnalytics from "./pages/AttendanceAnalytics";
+import StudentAttendanceDashboard from "./pages/StudentAttendanceDashboard";
 
 function App() {
 
@@ -82,6 +83,15 @@ function App() {
           element={
             <ProtectedRoute>
               <AttendanceAnalytics />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/student/dashboard"
+          element={
+            <ProtectedRoute>
+              <StudentAttendanceDashboard />
             </ProtectedRoute>
           }
         />

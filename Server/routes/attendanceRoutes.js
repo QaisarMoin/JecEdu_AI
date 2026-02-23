@@ -71,5 +71,12 @@ router.get(
     attendanceController.getSubjectAnalytics
 );
 
+router.get(
+    "/student-summary",
+    verifyToken,
+    authorizeRoles("student"),
+    attendanceController.getStudentAttendanceSummary
+);
+
 
 module.exports = router;

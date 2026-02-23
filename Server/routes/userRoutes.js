@@ -47,7 +47,7 @@ router.get(
                 role: "student",
                 department,
                 semester
-            }).select("_id name email");
+            }).select("_id name email rollNo");
 
             res.json(students);
 
