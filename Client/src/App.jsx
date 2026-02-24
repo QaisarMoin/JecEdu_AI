@@ -11,6 +11,8 @@ import FacultyAttendance from "./pages/FacultyAttendance";
 import AttendanceHistory from "./pages/AttendanceHistory";
 import AttendanceAnalytics from "./pages/AttendanceAnalytics";
 import StudentAttendanceDashboard from "./pages/StudentAttendanceDashboard";
+import FacultyMarks from "./pages/FacultyMarks";
+import StudentMarks from "./pages/StudentMarks";
 
 function App() {
 
@@ -92,6 +94,24 @@ function App() {
           element={
             <ProtectedRoute>
               <StudentAttendanceDashboard />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/faculty/marks"
+          element={
+            <ProtectedRoute>
+              <FacultyMarks />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/marks"
+          element={
+            <ProtectedRoute>
+              <StudentMarks />
             </ProtectedRoute>
           }
         />

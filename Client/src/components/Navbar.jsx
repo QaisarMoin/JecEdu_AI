@@ -22,6 +22,7 @@ export default function Navbar() {
       { to: "/attendance", label: "Attendance" },
       { to: "/student/dashboard", label: "My Attendance" },
       { to: "/notices", label: "Notices" },
+      { to: "/marks", label: "Marks" },
     ],
     admin: [
       { to: "/dashboard", label: "Dashboard" },
@@ -34,6 +35,7 @@ export default function Navbar() {
       { to: "/faculty/attendance", label: "Mark Attendance" },
       { to: "/faculty/history", label: "History" },
       { to: "/faculty/analytics", label: "Analytics" },
+      { to: "/faculty/marks", label: "Marks" },
     ],
   };
 
