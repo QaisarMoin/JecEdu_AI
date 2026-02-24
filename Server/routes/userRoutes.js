@@ -1,42 +1,20 @@
 const express = require("express");
 const router = express.Router();
-
 const User = require("../models/User");
 
-const { verifyToken, authorizeRoles } = require("../middleware/authMiddleware");
+const userController =
+require("../controllers/userController");
 
-
-// GET all faculty (admin only)
-router.get(
-    "/faculty",
+const {
     verifyToken,
-    authorizeRoles("admin"),
-    async (req, res) => {
-
-        try {
-
-            const faculty = await User.find({
-                role: "faculty"
-            }).select("_id name email");
-
-            res.json(faculty);
-
-        } catch (error) {
-
-            res.status(500).json({
-                message: error.message
-            });
-
-        }
-
-    }
-);
+    authorizeRoles
+} = require("../middleware/authMiddleware");
 
 // GET students by department and semester
 router.get(
     "/students",
     verifyToken,
-    authorizeRoles("faculty", "admin"),
+    authorizeRoles("admin", "faculty"),
     async (req, res) => {
 
         try {
@@ -44,10 +22,12 @@ router.get(
             const { department, semester } = req.query;
 
             const students = await User.find({
+
                 role: "student",
                 department,
-                semester
-            }).select("_id name email rollNo");
+                semester: Number(semester)
+
+            }).select("_id name rollNo email");
 
             res.json(students);
 
@@ -61,5 +41,30 @@ router.get(
 
     }
 );
+
+// admin only
+router.post(
+    "/",
+    verifyToken,
+    authorizeRoles("admin"),
+    userController.createUser
+);
+
+
+router.get(
+    "/",
+    verifyToken,
+    authorizeRoles("admin"),
+    userController.getUsers
+);
+
+
+router.delete(
+    "/:id",
+    verifyToken,
+    authorizeRoles("admin"),
+    userController.deleteUser
+);
+
 
 module.exports = router;
