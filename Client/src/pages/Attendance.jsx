@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import API from "../services/api";
-import Navbar from "../components/Navbar";
+import Sidebar from "../components/Navbar";
 
 export default function Attendance() {
   const [attendance, setAttendance] = useState([]);
@@ -63,9 +63,12 @@ export default function Attendance() {
 
   return (
     <>
-      <Navbar />
-      <div className="min-h-screen bg-gray-50">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      {/* <div className="flex min-h-screen bg-gray-100"> */}
+            <Sidebar />
+      
+            
+      <div className="flex-1 p-8 ml-64">
+        <div className=" mx-auto px-4 sm:px-6 lg:px-8 py-8">
           {/* Header */}
           <div className="mb-8">
             <h2 className="text-3xl font-bold text-gray-900">Attendance</h2>

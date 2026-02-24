@@ -1,167 +1,256 @@
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { useState } from "react";
+import {
+    LayoutDashboard,
+    Users,
+    BookOpen,
+    Bell,
+    Calendar,
+    ClipboardCheck,
+    BarChart,
+    GraduationCap,
+    FileText,
+    LogOut
+} from "lucide-react";
 
-export default function Navbar() {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const user = JSON.parse(localStorage.getItem("user"));
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+export default function Sidebar() {
 
-  const logout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    navigate("/");
-  };
+    const navigate = useNavigate();
+    const location = useLocation();
 
-  const isActive = (path) => location.pathname === path;
+    const user = JSON.parse(localStorage.getItem("user"));
 
-  const links = {
-    student: [
-      { to: "/dashboard", label: "Dashboard" },
-      { to: "/subjects", label: "Subjects" },
-      { to: "/attendance", label: "Attendance" },
-      { to: "/student/dashboard", label: "My Attendance" },
-      { to: "/notices", label: "Notices" },
-      { to: "/marks", label: "Marks" },
-    ],
-    admin: [
-      { to: "/dashboard", label: "Dashboard" },
-      { to: "/notices", label: "Notices" },
-      { to: "/admin/subjects", label: "Manage Subjects" },
-    ],
-    faculty: [
-      { to: "/dashboard", label: "Dashboard" },
-      { to: "/notices", label: "Notices" },
-      { to: "/faculty/attendance", label: "Mark Attendance" },
-      { to: "/faculty/history", label: "History" },
-      { to: "/faculty/analytics", label: "Analytics" },
-      { to: "/faculty/marks", label: "Marks" },
-    ],
-  };
+    const logout = () => {
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        navigate("/");
+    };
 
-  const navLinks = links[user?.role] || [];
+    const isActive = (path) => location.pathname === path;
 
-  return (
-    <nav className="bg-white border-b border-gray-200 sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-14">
-          {/* Logo */}
-          <Link
-            to="/dashboard"
-            className="text-lg font-bold text-indigo-600 tracking-tight flex-shrink-0"
-          >
-            SDAS
-          </Link>
 
-          {/* Desktop Links */}
-          <div className="hidden md:flex items-center gap-1">
-            {navLinks.map((link) => (
-              <Link
-                key={link.to}
-                to={link.to}
-                className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
-                  isActive(link.to)
-                    ? "bg-indigo-50 text-indigo-700"
-                    : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
-                }`}
-              >
-                {link.label}
-              </Link>
-            ))}
-          </div>
+    /* ROLE BASED LINKS */
 
-          {/* Right Side */}
-          <div className="flex items-center gap-4">
-            <div className="hidden sm:flex items-center gap-2 text-sm">
-              <span className="text-gray-700 font-medium">{user?.name}</span>
-              <span className="text-gray-400">·</span>
-              <span className="text-gray-400 capitalize text-xs">
-                {user?.role}
-              </span>
+    const links = {
+
+        admin: [
+
+            {
+                to: "/dashboard",
+                label: "Dashboard",
+                icon: LayoutDashboard
+            },
+
+            {
+                to: "/admin/users",
+                label: "User Management",
+                icon: Users
+            },
+
+            {
+                to: "/admin/subjects",
+                label: "Subject Management",
+                icon: BookOpen
+            },
+
+            {
+                to: "/notices",
+                label: "Notice Board",
+                icon: Bell
+            },
+
+            {
+                to: "/timetable",
+                label: "Timetable",
+                icon: Calendar
+            }
+
+        ],
+
+
+        faculty: [
+
+            {
+                to: "/dashboard",
+                label: "Dashboard",
+                icon: LayoutDashboard
+            },
+
+            {
+                to: "/faculty/attendance",
+                label: "Mark Attendance",
+                icon: ClipboardCheck
+            },
+
+            {
+                to: "/faculty/history",
+                label: "Attendance History",
+                icon: FileText
+            },
+
+            // {
+            //     to: "/faculty/analytics",
+            //     label: "Analytics",
+            //     icon: BarChart
+            // },
+
+            {
+                to: "/faculty/marks",
+                label: "Marks",
+                icon: GraduationCap
+            },
+
+            {
+                to: "/notices",
+                label: "Notice Board",
+                icon: Bell
+            }
+
+        ],
+
+
+        student: [
+
+            {
+                to: "/dashboard",
+                label: "Dashboard",
+                icon: LayoutDashboard
+            },
+
+            {
+                to: "/subjects",
+                label: "Subjects",
+                icon: BookOpen
+            },
+
+            {
+                to: "/attendance",
+                label: "Attendance",
+                icon: ClipboardCheck
+            },
+            {
+                to: "/student/dashboard",
+                label: "Attendance Analytics",
+                icon: ClipboardCheck
+            },
+
+            {
+                to: "/marks",
+                label: "Marks",
+                icon: GraduationCap
+            },
+
+            {
+                to: "/notices",
+                label: "Notice Board",
+                icon: Bell
+            }
+
+        ]
+
+    };
+
+
+    const navLinks = links[user?.role] || [];
+
+
+    return (
+
+        <div className="w-64 h-screen fixed bg-white border-r flex flex-col justify-between">
+
+
+            {/* Top Logo */}
+
+            <div>
+
+                <div className="px-6 py-5 border-b">
+
+                    <h1 className="text-xl font-bold text-indigo-600">
+                        SDAS
+                    </h1>
+
+                    <p className="text-xs text-gray-400 capitalize">
+                        {user?.role} panel
+                    </p>
+
+                </div>
+
+
+                {/* Navigation */}
+
+                <nav className="p-3 space-y-2">
+
+                    {navLinks.map(link => {
+
+                        const Icon = link.icon;
+
+                        return (
+
+                            <Link
+                                key={link.to}
+                                to={link.to}
+                                className={`flex items-center gap-3 px-4 py-2.5 rounded-lg transition
+                                
+                                ${
+                                    isActive(link.to)
+                                    ?
+                                    "bg-indigo-100 text-indigo-600 font-medium"
+                                    :
+                                    "text-gray-600 hover:bg-gray-100"
+                                }
+                                
+                                `}
+                            >
+
+                                <Icon size={18} />
+
+                                {link.label}
+
+                            </Link>
+
+                        );
+
+                    })}
+
+                </nav>
+
             </div>
 
-            <button
-              onClick={logout}
-              className="hidden sm:inline-flex text-sm text-gray-500 hover:text-red-600 font-medium transition-colors"
-            >
-              Logout
-            </button>
 
-            {/* Mobile Toggle */}
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-1.5 text-gray-500 hover:text-gray-700 rounded-md hover:bg-gray-100 transition-colors"
-            >
-              {mobileMenuOpen ? (
-                <svg
-                  className="w-5 h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                </svg>
-              ) : (
-                <svg
-                  className="w-5 h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M4 6h16M4 12h16M4 18h16"
-                  />
-                </svg>
-              )}
-            </button>
-          </div>
-        </div>
-      </div>
 
-      {/* Mobile Menu */}
-      {mobileMenuOpen && (
-        <div className="md:hidden border-t border-gray-100 bg-white">
-          <div className="px-4 py-3 space-y-1">
-            {navLinks.map((link) => (
-              <Link
-                key={link.to}
-                to={link.to}
-                onClick={() => setMobileMenuOpen(false)}
-                className={`block px-3 py-2 rounded-md text-sm font-medium ${
-                  isActive(link.to)
-                    ? "bg-indigo-50 text-indigo-700"
-                    : "text-gray-600 hover:bg-gray-50"
-                }`}
-              >
-                {link.label}
-              </Link>
-            ))}
+            {/* Bottom User Profile */}
 
-            <div className="border-t border-gray-100 pt-3 mt-3 flex items-center justify-between px-3">
-              <span className="text-sm text-gray-500">
-                {user?.name}{" "}
-                <span className="text-gray-400 capitalize text-xs">
-                  · {user?.role}
-                </span>
-              </span>
-              <button
-                onClick={logout}
-                className="text-sm text-red-600 font-medium"
-              >
-                Logout
-              </button>
+            <div className="p-4 border-t">
+
+                <div className="flex items-center gap-3">
+
+                    <div className="w-10 h-10 bg-indigo-500 text-white rounded-full flex items-center justify-center font-semibold">
+                        {user?.name?.charAt(0)}
+                    </div>
+
+                    <div className="flex-1">
+
+                        <p className="text-sm font-medium">
+                            {user?.name}
+                        </p>
+
+                        <p className="text-xs text-gray-500 capitalize">
+                            {user?.role}
+                        </p>
+
+                    </div>
+
+
+                    <button onClick={logout}>
+                        <LogOut className="text-gray-500 hover:text-red-500" size={18} />
+                    </button>
+
+                </div>
+
             </div>
-          </div>
+
+
         </div>
-      )}
-    </nav>
-  );
+
+    );
+
 }

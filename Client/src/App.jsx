@@ -13,6 +13,7 @@ import AttendanceAnalytics from "./pages/AttendanceAnalytics";
 import StudentAttendanceDashboard from "./pages/StudentAttendanceDashboard";
 import FacultyMarks from "./pages/FacultyMarks";
 import StudentMarks from "./pages/StudentMarks";
+import AdminUsers from "./pages/AdminUsers";
 
 function App() {
 
@@ -115,6 +116,8 @@ function App() {
             </ProtectedRoute>
           }
         />
+
+        <Route path="/admin/users" element={<ProtectedRoute><AdminUsers /></ProtectedRoute>} />
 
       </Routes>
 
