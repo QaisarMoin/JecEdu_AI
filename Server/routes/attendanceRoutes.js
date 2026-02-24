@@ -40,6 +40,13 @@ router.post(
     attendanceController.markClassAttendance
 );
 
+router.get(
+    "/status",
+    verifyToken,
+    authorizeRoles("faculty"),
+    attendanceController.checkAttendanceStatus
+);
+
 // get subject attendence
 router.get(
     "/subject/:subjectId",

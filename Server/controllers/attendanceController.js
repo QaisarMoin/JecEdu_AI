@@ -102,6 +102,21 @@ exports.markClassAttendance = async (req, res) => {
 
         const { subjectId, date, attendance } = req.body;
 
+        // Check if attendance already exists for this subject and date
+        const existingAttendance = await Attendance.findOne({
+            subject: subjectId,
+            date: new Date(date)
+        });
+
+        if (existingAttendance) {
+
+            return res.status(400).json({
+                message:
+                "Attendance for this subject has already been marked!"
+            });
+
+        }
+
         // attendance = array of students
 
         const records = attendance.map(item => ({
@@ -116,6 +131,31 @@ exports.markClassAttendance = async (req, res) => {
         res.status(201).json({
             message: "Class attendance marked successfully",
             count: records.length
+        });
+
+    } catch (error) {
+
+        res.status(500).json({
+            message: error.message
+        });
+
+    }
+
+};
+
+exports.checkAttendanceStatus = async (req, res) => {
+
+    try {
+
+        const { subjectId, date } = req.query;
+
+        const existing = await Attendance.findOne({
+            subject: subjectId,
+            date: new Date(date)
+        });
+
+        res.json({
+            alreadyMarked: !!existing
         });
 
     } catch (error) {

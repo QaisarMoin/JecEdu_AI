@@ -21,6 +21,7 @@ export default function Navbar() {
       { to: "/subjects", label: "Subjects" },
       { to: "/attendance", label: "Attendance" },
       { to: "/student/dashboard", label: "My Attendance" },
+      { to: "/notices", label: "Notices" },
     ],
     admin: [
       { to: "/dashboard", label: "Dashboard" },

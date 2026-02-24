@@ -13,10 +13,18 @@ export default function FacultyAttendance() {
   const [selectedDate, setSelectedDate] = useState(
     new Date().toISOString().split("T")[0]
   );
+  const [alreadyMarked, setAlreadyMarked] = useState(false);
 
   useEffect(() => {
     fetchSubjects();
   }, []);
+
+  // Re-check attendance status when date changes
+  useEffect(() => {
+    if (selectedSubject) {
+      checkAttendanceStatus(selectedSubject, selectedDate);
+    }
+  }, [selectedDate, selectedSubject]);
 
   const fetchSubjects = async () => {
     try {
@@ -27,11 +35,24 @@ export default function FacultyAttendance() {
     }
   };
 
+  const checkAttendanceStatus = async (subjectId, date) => {
+    try {
+      const statusRes = await API.get(
+        `/attendance/status?subjectId=${subjectId}&date=${date}`
+      );
+      setAlreadyMarked(statusRes.data.alreadyMarked);
+    } catch (error) {
+      console.error("Failed to check attendance status:", error);
+      setAlreadyMarked(false);
+    }
+  };
+
   const selectSubject = async (subjectId) => {
     if (!subjectId) {
       setSelectedSubject("");
       setStudents([]);
       setAttendance({});
+      setAlreadyMarked(false);
       return;
     }
 
@@ -40,6 +61,11 @@ export default function FacultyAttendance() {
 
     try {
       const subject = subjects.find((s) => s._id === subjectId);
+      
+      // Check if attendance already marked
+      await checkAttendanceStatus(subjectId, selectedDate);
+
+      // Fetch students
       const res = await API.get(
         `/users/students?department=${subject.department}&semester=${subject.semester}`
       );
@@ -89,9 +115,10 @@ export default function FacultyAttendance() {
       });
 
       alert("Attendance submitted successfully!");
+      setAlreadyMarked(true); // Update state after successful submission
     } catch (error) {
       console.error("Failed to submit attendance:", error);
-      alert("Failed to submit attendance. Please try again.");
+      alert(error.response?.data?.message || "Failed to submit attendance");
     } finally {
       setSubmitting(false);
     }
@@ -110,6 +137,52 @@ export default function FacultyAttendance() {
   };
 
   const selectedSubjectData = subjects.find((s) => s._id === selectedSubject);
+
+  // Helper function to get button content
+  const getSubmitButtonContent = () => {
+    if (submitting) {
+      return (
+        <span className="flex items-center gap-2">
+          <svg
+            className="animate-spin h-5 w-5"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <circle
+              className="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              strokeWidth="4"
+            ></circle>
+            <path
+              className="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+            ></path>
+          </svg>
+          Submitting...
+        </span>
+      );
+    }
+    
+    if (alreadyMarked) {
+      return (
+        <span className="flex items-center gap-2">
+          <span>✓</span>
+          Attendance Already Marked
+        </span>
+      );
+    }
+    
+    return (
+      <span className="flex items-center gap-2">
+        <span>Submit Attendance</span>
+        <span>→</span>
+      </span>
+    );
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -177,6 +250,11 @@ export default function FacultyAttendance() {
                     {selectedSubjectData.department}
                   </p>
                 </div>
+                {alreadyMarked && (
+                  <span className="ml-auto px-3 py-1 bg-yellow-100 text-yellow-800 text-sm font-medium rounded-full">
+                    Already Marked
+                  </span>
+                )}
               </div>
             </div>
           )}
@@ -247,13 +325,23 @@ export default function FacultyAttendance() {
                 <div className="flex gap-2">
                   <button
                     onClick={() => markAllAs("present")}
-                    className="px-4 py-2 text-sm font-medium text-green-700 bg-green-100 hover:bg-green-200 rounded-lg transition-colors"
+                    disabled={alreadyMarked}
+                    className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
+                      alreadyMarked
+                        ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                        : "text-green-700 bg-green-100 hover:bg-green-200"
+                    }`}
                   >
                     Mark All Present
                   </button>
                   <button
                     onClick={() => markAllAs("absent")}
-                    className="px-4 py-2 text-sm font-medium text-red-700 bg-red-100 hover:bg-red-200 rounded-lg transition-colors"
+                    disabled={alreadyMarked}
+                    className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
+                      alreadyMarked
+                        ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                        : "text-red-700 bg-red-100 hover:bg-red-200"
+                    }`}
                   >
                     Mark All Absent
                   </button>
@@ -301,8 +389,11 @@ export default function FacultyAttendance() {
                       <div className="flex gap-2">
                         <button
                           onClick={() => markAttendance(student._id, "present")}
+                          disabled={alreadyMarked}
                           className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
-                            attendance[student._id] === "present"
+                            alreadyMarked
+                              ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                              : attendance[student._id] === "present"
                               ? "bg-green-500 text-white shadow-md scale-105"
                               : "bg-gray-100 text-gray-600 hover:bg-green-100 hover:text-green-700"
                           }`}
@@ -315,8 +406,11 @@ export default function FacultyAttendance() {
 
                         <button
                           onClick={() => markAttendance(student._id, "absent")}
+                          disabled={alreadyMarked}
                           className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
-                            attendance[student._id] === "absent"
+                            alreadyMarked
+                              ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                              : attendance[student._id] === "absent"
                               ? "bg-red-500 text-white shadow-md scale-105"
                               : "bg-gray-100 text-gray-600 hover:bg-red-100 hover:text-red-700"
                           }`}
@@ -337,42 +431,14 @@ export default function FacultyAttendance() {
             <div className="flex justify-end">
               <button
                 onClick={submitAttendance}
-                disabled={submitting}
+                disabled={submitting || alreadyMarked}
                 className={`px-8 py-3 rounded-xl text-white font-semibold text-lg shadow-lg transition-all duration-200 ${
-                  submitting
+                  submitting || alreadyMarked
                     ? "bg-gray-400 cursor-not-allowed"
                     : "bg-indigo-600 hover:bg-indigo-700 hover:shadow-xl active:scale-95"
                 }`}
               >
-                {submitting ? (
-                  <span className="flex items-center gap-2">
-                    <svg
-                      className="animate-spin h-5 w-5"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                    >
-                      <circle
-                        className="opacity-25"
-                        cx="12"
-                        cy="12"
-                        r="10"
-                        stroke="currentColor"
-                        strokeWidth="4"
-                      ></circle>
-                      <path
-                        className="opacity-75"
-                        fill="currentColor"
-                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                      ></path>
-                    </svg>
-                    Submitting...
-                  </span>
-                ) : (
-                  <span className="flex items-center gap-2">
-                    <span>Submit Attendance</span>
-                    <span>→</span>
-                  </span>
-                )}
+                {getSubmitButtonContent()}
               </button>
             </div>
           </>
