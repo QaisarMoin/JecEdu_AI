@@ -10,6 +10,32 @@ const {
     authorizeRoles
 } = require("../middleware/authMiddleware");
 
+// GET all faculty
+router.get(
+    "/faculty",
+    verifyToken,
+    authorizeRoles("admin"),
+    async (req, res) => {
+
+        try {
+
+            const faculty = await User.find({
+                role: "faculty"
+            }).select("_id name email");
+
+            res.json(faculty);
+
+        } catch (error) {
+
+            res.status(500).json({
+                message: error.message
+            });
+
+        }
+
+    }
+);
+
 // GET students by department and semester
 router.get(
     "/students",

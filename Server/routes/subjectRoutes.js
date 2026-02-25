@@ -3,7 +3,10 @@ const router = express.Router();
 
 const subjectController = require("../controllers/subjectController");
 
-const { verifyToken, authorizeRoles } = require("../middleware/authMiddleware");
+const {
+    verifyToken,
+    authorizeRoles
+} = require("../middleware/authMiddleware");
 
 
 // create subject (admin only)
@@ -15,7 +18,7 @@ router.post(
 );
 
 
-// get all subjects (admin)
+// get all subjects (admin) — supports ?department=IT&semester=3
 router.get(
     "/",
     verifyToken,

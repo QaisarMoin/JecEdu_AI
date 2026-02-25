@@ -14,6 +14,11 @@ import StudentAttendanceDashboard from "./pages/StudentAttendanceDashboard";
 import FacultyMarks from "./pages/FacultyMarks";
 import StudentMarks from "./pages/StudentMarks";
 import AdminUsers from "./pages/AdminUsers";
+import AdminTimetableList from "./pages/AdminTimetableList";
+import AdminTimetableGenerator from "./pages/AdminTimetableGenerator";
+import AdminTimetableEditor from "./pages/AdminTimetableEditor";
+import FacultyTimetable from "./pages/FacultyTimetable";
+import StudentTimetable from "./pages/StudentTimetable";
 
 function App() {
 
@@ -119,6 +124,16 @@ function App() {
 
         <Route path="/admin/users" element={<ProtectedRoute><AdminUsers /></ProtectedRoute>} />
 
+        // Admin routes
+        <Route path="/admin/timetable" element={<AdminTimetableList />} />
+        <Route path="/admin/timetable/generate" element={<AdminTimetableGenerator />} />
+        <Route path="/admin/timetable/edit/:weekId" element={<AdminTimetableEditor />} />
+
+        // Faculty route
+        <Route path="/faculty/timetable" element={<FacultyTimetable />} />
+
+        // Student route
+        <Route path="/student/timetable" element={<StudentTimetable />} />
       </Routes>
 
     </BrowserRouter>

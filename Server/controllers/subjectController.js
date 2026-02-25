@@ -12,7 +12,7 @@ exports.createSubject = async (req, res) => {
             name,
             code,
             faculty,
-            department,
+            department: department || "IT",
             semester
         });
 
@@ -32,13 +32,23 @@ exports.createSubject = async (req, res) => {
 };
 
 
-// GET ALL SUBJECTS (Admin)
+// GET ALL SUBJECTS (Admin) — supports query filters
 exports.getAllSubjects = async (req, res) => {
 
     try {
 
-        const subjects = await Subject.find()
-        .populate("faculty", "name email");
+        const filter = {};
+
+        if (req.query.department) {
+            filter.department = req.query.department;
+        }
+
+        if (req.query.semester) {
+            filter.semester = parseInt(req.query.semester);
+        }
+
+        const subjects = await Subject.find(filter)
+            .populate("faculty", "name email");
 
         res.json(subjects);
 
@@ -60,7 +70,7 @@ exports.getFacultySubjects = async (req, res) => {
 
         const subjects = await Subject.find({
             faculty: req.user.id
-        });
+        }).populate("faculty", "name email");
 
         res.json(subjects);
 
@@ -83,7 +93,7 @@ exports.getStudentSubjects = async (req, res) => {
         const subjects = await Subject.find({
             department: req.user.department,
             semester: req.user.semester
-        });
+        }).populate("faculty", "name email");
 
         res.json(subjects);
 

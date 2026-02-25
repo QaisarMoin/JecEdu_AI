@@ -10,6 +10,7 @@ const subjectRoutes = require("./routes/subjectRoutes");
 const attendanceRoutes = require("./routes/attendanceRoutes");
 const userRoutes = require("./routes/userRoutes");
 const markRoutes = require("./routes/markRoutes");
+const timetableRoutes = require("./routes/timetableRoutes");
 
 const app = express();
 
@@ -37,6 +38,7 @@ app.use("/api/subjects", subjectRoutes);
 app.use("/api/attendance", attendanceRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/marks", markRoutes);
+app.use("/api/timetable", timetableRoutes);
 
 app.get("/", (req, res) => {
     res.send("SDAS Backend Running");
