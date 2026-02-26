@@ -9,27 +9,70 @@ const {
 } = require("../middleware/authMiddleware");
 
 
+// Faculty routes
 router.post(
-    "/",
+    "/enter",
     verifyToken,
     authorizeRoles("faculty"),
     markController.enterMarks
 );
 
-
-router.get(
-    "/student",
+router.post(
+    "/lock",
     verifyToken,
-    authorizeRoles("student"),
-    markController.getStudentMarks
+    authorizeRoles("faculty"),
+    markController.lockComponent
 );
 
+router.post(
+    "/unlock",
+    verifyToken,
+    authorizeRoles("faculty"),
+    markController.unlockComponent
+);
+
+router.post(
+    "/publish",
+    verifyToken,
+    authorizeRoles("faculty"),
+    markController.publishComponent
+);
+
+router.post(
+    "/unpublish",
+    verifyToken,
+    authorizeRoles("faculty"),
+    markController.unpublishComponent
+);
+
+router.post(
+    "/remarks",
+    verifyToken,
+    authorizeRoles("faculty"),
+    markController.addRemarks
+);
 
 router.get(
     "/subject/:subjectId",
     verifyToken,
     authorizeRoles("faculty"),
     markController.getSubjectMarks
+);
+
+router.get(
+    "/subject/:subjectId/stats",
+    verifyToken,
+    authorizeRoles("faculty"),
+    markController.getSubjectStats
+);
+
+
+// Student routes
+router.get(
+    "/student",
+    verifyToken,
+    authorizeRoles("student"),
+    markController.getStudentMarks
 );
 
 
