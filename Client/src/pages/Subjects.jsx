@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import API from "../services/api";
-import Navbar from "../components/Navbar";
+import Sidebar from "../components/Navbar";
 
 export default function Subjects() {
 
@@ -23,8 +23,10 @@ export default function Subjects() {
     return (
 
         <>
-        <Navbar />
-        <div style={{ padding: 20 }}>
+        <div className="flex min-h-screen bg-gray-50">
+                    <Sidebar />
+        
+                    <div className="flex-1 p-6 lg:p-8 ml-64">
 
             <h2>Subjects</h2>
 
@@ -42,6 +44,7 @@ export default function Subjects() {
 
             }
 
+        </div>
         </div>
 </>
     );

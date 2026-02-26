@@ -1,4 +1,5 @@
 const Subject = require("../models/Subject");
+const User = require("../models/User");
 
 
 // CREATE SUBJECT (Admin)
@@ -90,9 +91,20 @@ exports.getStudentSubjects = async (req, res) => {
 
     try {
 
+        const studentId = req.user.id;
+        
+                // Fetch full student from DB
+                const student = await User.findById(studentId);
+        
+                if (!student) {
+                    return res.status(404).json({
+                        message: "Student not found"
+                    });
+                }
+        // console.log(req.user.department + req.user.semester)
         const subjects = await Subject.find({
-            department: req.user.department,
-            semester: req.user.semester
+            department: student.department,
+            semester: student.semester
         }).populate("faculty", "name email");
 
         res.json(subjects);
