@@ -20,13 +20,13 @@ app.use(express.json());
 console.log("MONGO_URI:", process.env.MONGO_URI);
 
 
-mongoose.connect("mongodb://localhost:27017")
+mongoose.connect(process.env.MONGO_URI)
 .then(() => {
     console.log("MongoDB Connected Successfully");
 })
 .catch((err) => {
     console.log("MongoDB Connection Error:");
-    console.log(err.message);
+    console.log(err);
 });
 
 

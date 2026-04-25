@@ -6,11 +6,10 @@ import API from "../services/api";
 const DEFAULT_DEPARTMENT = "IT";
 
 const DEFAULT_TIME_SLOTS = [
-    { label: "9:00 - 10:00", start: "09:00", end: "10:00", isLunch: false },
     { label: "10:00 - 11:00", start: "10:00", end: "11:00", isLunch: false },
     { label: "11:00 - 12:00", start: "11:00", end: "12:00", isLunch: false },
-    { label: "12:00 - 1:00 (Lunch)", start: "12:00", end: "13:00", isLunch: true },
-    { label: "1:00 - 2:00", start: "13:00", end: "14:00", isLunch: false },
+    { label: "12:00 - 1:00 (Lunch)", start: "12:00", end: "13:00", isLunch: false },
+    { label: "1:00 - 2:00", start: "13:00", end: "14:00", isLunch: true },
     { label: "2:00 - 3:00", start: "14:00", end: "15:00", isLunch: false },
     { label: "3:00 - 4:00", start: "15:00", end: "16:00", isLunch: false },
 ];
