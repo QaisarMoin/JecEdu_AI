@@ -1,4 +1,5 @@
 import { useEffect, useState, useMemo } from "react";
+import { useNavigate } from "react-router-dom"; // ← ADD THIS
 import Sidebar from "../components/Navbar";
 import API from "../services/api";
 import {
@@ -14,6 +15,7 @@ import {
 
 export default function Dashboard() {
   const user = JSON.parse(localStorage.getItem("user")) || {};
+  const navigate = useNavigate(); // ← ADD THIS
 
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState({
@@ -30,6 +32,7 @@ export default function Dashboard() {
     studentTimetable: { week: null, entries: [] },
   });
 
+  // ... rest of your state and effects unchanged
   useEffect(() => {
     let mounted = true;
     fetchDashboardData(mounted);
@@ -134,7 +137,6 @@ export default function Dashboard() {
       <div className="flex-1 lg:ml-64 pt-16 lg:pt-0">
         {/* Hero Header */}
         <div className="bg-gradient-to-br from-slate-900 via-slate-800 to-blue-900 px-4 lg:px-8 pt-8 pb-24 relative overflow-hidden">
-          {/* Background decoration */}
           <div className="absolute inset-0 overflow-hidden">
             <div className="absolute -top-40 -right-40 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl" />
             <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-indigo-500/10 rounded-full blur-3xl" />
@@ -142,7 +144,6 @@ export default function Dashboard() {
             <div className="absolute top-32 right-1/3 w-1 h-1 bg-white/20 rounded-full" />
             <div className="absolute top-16 left-1/3 w-1.5 h-1.5 bg-indigo-400/20 rounded-full" />
           </div>
-
           <div className="max-w-6xl mx-auto relative">
             <DashboardHeader user={user} />
           </div>
@@ -150,9 +151,10 @@ export default function Dashboard() {
 
         {/* Main Content */}
         <div className="max-w-6xl mx-auto px-4 lg:px-8 -mt-16 pb-8 relative">
-          {user.role === "admin" && <AdminDashboard data={data} user={user} />}
-          {user.role === "faculty" && <FacultyDashboard data={data} user={user} />}
-          {user.role === "student" && <StudentDashboard data={data} user={user} />}
+          {/* ↓ Pass navigate down to each dashboard */}
+          {user.role === "admin" && <AdminDashboard data={data} user={user} navigate={navigate} />}
+          {user.role === "faculty" && <FacultyDashboard data={data} user={user} navigate={navigate} />}
+          {user.role === "student" && <StudentDashboard data={data} user={user} navigate={navigate} />}
         </div>
       </div>
     </div>
@@ -160,8 +162,7 @@ export default function Dashboard() {
 }
 
 
-// ─── HEADER ─────────────────────────────
-
+// ─── HEADER (unchanged) ─────────────────
 function DashboardHeader({ user }) {
   const getGreeting = () => {
     const hour = new Date().getHours();
@@ -211,7 +212,7 @@ function DashboardHeader({ user }) {
 
 // ─── ADMIN DASHBOARD ────────────────────
 
-function AdminDashboard({ data }) {
+function AdminDashboard({ data, navigate }) {  // ← accept navigate
   const students = data.users.filter((u) => u.role === "student");
   const faculty = data.users.filter((u) => u.role === "faculty");
 
@@ -236,14 +237,29 @@ function AdminDashboard({ data }) {
     <>
       {/* Stats Grid */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        <StatCard label="Total Students" value={students.length} icon={GraduationCap} color="blue"
-          sub={`${departmentStats.length} departments`} trend="up" />
-        <StatCard label="Faculty Members" value={faculty.length} icon={Users} color="violet"
-          sub="Active members" />
-        <StatCard label="Subjects" value={data.subjects.length} icon={BookOpen} color="amber"
-          sub="All semesters" />
-        <StatCard label="Notices" value={data.notices.length} icon={Bell} color="rose"
-          sub={data.notices.length > 0 ? `Latest: ${timeAgo(data.notices[0]?.createdAt)}` : "None yet"} />
+        {/* ↓ StatCards now navigate on click */}
+        <StatCard
+          label="Total Students" value={students.length}
+          icon={GraduationCap} color="blue"
+          sub={`${departmentStats.length} departments`} trend="up"
+          onClick={() => navigate("/admin/users?role=student")}
+        />
+        <StatCard
+          label="Faculty Members" value={faculty.length}
+          icon={Users} color="violet" sub="Active members"
+          onClick={() => navigate("/admin/users?role=faculty")}
+        />
+        <StatCard
+          label="Subjects" value={data.subjects.length}
+          icon={BookOpen} color="amber" sub="All semesters"
+          onClick={() => navigate("/admin/subjects")}
+        />
+        <StatCard
+          label="Notices" value={data.notices.length}
+          icon={Bell} color="rose"
+          sub={data.notices.length > 0 ? `Latest: ${timeAgo(data.notices[0]?.createdAt)}` : "None yet"}
+          onClick={() => navigate("/admin/notices")}
+        />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
@@ -279,15 +295,23 @@ function AdminDashboard({ data }) {
           )}
         </Card>
 
-        {/* Recent Notices */}
+        {/* Recent Notices — with "View All" button + clickable items */}
         <Card className="lg:col-span-2">
-          <SectionTitle icon={Megaphone} title="Recent Notices" count={data.notices.length} />
+          <SectionTitle
+            icon={Megaphone} title="Recent Notices"
+            count={data.notices.length}
+            action={{ label: "View All", onClick: () => navigate("/admin/notices") }}
+          />
           {data.notices.length === 0 ? (
             <EmptyState text="No notices posted" icon={Bell} />
           ) : (
             <div className="space-y-3 mt-5">
               {data.notices.slice(0, 5).map((notice) => (
-                <NoticeItem key={notice._id} notice={notice} />
+                <NoticeItem
+                  key={notice._id}
+                  notice={notice}
+                  onClick={() => navigate("/admin/notices")}  // ← clickable
+                />
               ))}
             </div>
           )}
@@ -295,16 +319,23 @@ function AdminDashboard({ data }) {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Recent Users */}
+        {/* Recent Users — with "Manage" button */}
         <Card>
-          <SectionTitle icon={UserCheck} title="Recently Added Users" count={recentUsers.length} />
+          <SectionTitle
+            icon={UserCheck} title="Recently Added Users"
+            count={recentUsers.length}
+            action={{ label: "Manage Users", onClick: () => navigate("/admin/users") }}
+          />
           {recentUsers.length === 0 ? (
             <EmptyState text="No users yet" icon={Users} />
           ) : (
             <div className="space-y-1 mt-5">
               {recentUsers.map((u) => (
-                <div key={u._id}
-                  className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-gray-50 transition-all duration-200 group cursor-default">
+                <div
+                  key={u._id}
+                  onClick={() => navigate("/admin/users")}  // ← clickable row
+                  className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-gray-50 transition-all duration-200 group cursor-pointer"
+                >
                   <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white text-xs font-bold shadow-sm shadow-blue-200 flex-shrink-0">
                     {u.name?.charAt(0).toUpperCase()}
                   </div>
@@ -312,32 +343,44 @@ function AdminDashboard({ data }) {
                     <p className="text-sm font-medium text-gray-800 truncate">{u.name}</p>
                     <p className="text-xs text-gray-400 truncate">{u.email}</p>
                   </div>
-                  <span className={`text-[10px] font-semibold px-2.5 py-1 rounded-lg ${u.role === "admin"
-                    ? "bg-red-50 text-red-600 ring-1 ring-red-100"
-                    : u.role === "faculty"
-                      ? "bg-violet-50 text-violet-600 ring-1 ring-violet-100"
-                      : "bg-blue-50 text-blue-600 ring-1 ring-blue-100"
+                  <div className="flex items-center gap-2">
+                    <span className={`text-[10px] font-semibold px-2.5 py-1 rounded-lg ${
+                      u.role === "admin"
+                        ? "bg-red-50 text-red-600 ring-1 ring-red-100"
+                        : u.role === "faculty"
+                          ? "bg-violet-50 text-violet-600 ring-1 ring-violet-100"
+                          : "bg-blue-50 text-blue-600 ring-1 ring-blue-100"
                     }`}>
-                    {u.role}
-                  </span>
+                      {u.role}
+                    </span>
+                    {/* Arrow shows on hover */}
+                    <ChevronRight className="w-4 h-4 text-gray-300 opacity-0 group-hover:opacity-100 transition-opacity" />
+                  </div>
                 </div>
               ))}
             </div>
           )}
         </Card>
 
-        {/* Timetable Weeks */}
+        {/* Timetable Weeks — each row navigates to editor */}
         <Card>
-          <SectionTitle icon={Calendar} title="Timetable Weeks" count={data.timetableWeeks.length} />
+          <SectionTitle
+            icon={Calendar} title="Timetable Weeks"
+            count={data.timetableWeeks.length}
+            action={{ label: "View All", onClick: () => navigate("/admin/timetable") }}
+          />
           {data.timetableWeeks.length === 0 ? (
             <EmptyState text="No timetable weeks created" icon={Calendar} />
           ) : (
             <div className="space-y-2 mt-5">
               {data.timetableWeeks.slice(0, 6).map((w) => (
-                <div key={w._id}
-                  className="flex items-center justify-between p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
+                <div
+                  key={w._id}
+                  onClick={() => navigate(`/admin/timetable/edit/${w._id}`)}  // ← navigate to editor
+                  className="flex items-center justify-between p-3 bg-gray-50 rounded-xl hover:bg-blue-50 hover:border-blue-100 border border-transparent transition-all cursor-pointer group"
+                >
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center">
+                    <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center group-hover:bg-blue-200 transition-colors">
                       <Calendar className="w-4 h-4 text-blue-600" />
                     </div>
                     <div>
@@ -346,10 +389,22 @@ function AdminDashboard({ data }) {
                           month: "short", day: "numeric", year: "numeric",
                         })}
                       </p>
-                      <p className="text-xs text-gray-400">{w.department} • Sem {w.semester}</p>
+                      <p className="text-xs text-gray-400">
+                        {w.department} • Sem {w.semester}
+                      </p>
                     </div>
                   </div>
-                  <ChevronRight className="w-4 h-4 text-gray-300" />
+                  <div className="flex items-center gap-2">
+                    {/* Status badge */}
+                    <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${
+                      w.status === "finalized"
+                        ? "bg-green-100 text-green-700"
+                        : "bg-yellow-100 text-yellow-700"
+                    }`}>
+                      {w.status}
+                    </span>
+                    <ChevronRight className="w-4 h-4 text-gray-300 group-hover:text-blue-400 group-hover:translate-x-0.5 transition-all" />
+                  </div>
                 </div>
               ))}
             </div>
@@ -363,7 +418,7 @@ function AdminDashboard({ data }) {
 
 // ─── FACULTY DASHBOARD ──────────────────
 
-function FacultyDashboard({ data, user }) {
+function FacultyDashboard({ data, user, navigate }) {  // ← accept navigate
   const todayDay = new Date().toLocaleDateString("en-US", { weekday: "long" });
 
   const todayClasses = useMemo(() => {
@@ -383,17 +438,22 @@ function FacultyDashboard({ data, user }) {
     <>
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         <StatCard label="My Subjects" value={data.facultySubjects.length}
-          icon={BookMarked} color="indigo" sub="Assigned to you" />
+          icon={BookMarked} color="indigo" sub="Assigned to you"
+          onClick={() => navigate("/faculty/subjects")}
+        />
         <StatCard label="Today's Classes" value={todayClasses.length}
-          icon={Clock} color="emerald" sub={todayDay} />
+          icon={Clock} color="emerald" sub={todayDay}
+          onClick={() => navigate("/faculty/timetable")}
+        />
         <StatCard label="Batches" value={totalStudentsTeaching}
           icon={Users} color="violet" sub="Dept-Semester combos" />
         <StatCard label="Notices" value={data.notices.length}
-          icon={Bell} color="amber" sub="Department notices" />
+          icon={Bell} color="amber" sub="Department notices"
+          onClick={() => navigate("/notices")}
+        />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-        {/* Today's Schedule */}
         <Card className="lg:col-span-2">
           <SectionTitle icon={Timer} title={`Today's Schedule — ${todayDay}`} />
           {todayClasses.length === 0 ? (
@@ -409,15 +469,22 @@ function FacultyDashboard({ data, user }) {
           )}
         </Card>
 
-        {/* Subjects List */}
         <Card>
-          <SectionTitle icon={BookOpen} title="My Subjects" count={data.facultySubjects.length} />
+          <SectionTitle
+            icon={BookOpen} title="My Subjects"
+            count={data.facultySubjects.length}
+            action={{ label: "View All", onClick: () => navigate("/faculty/subjects") }}
+          />
           {data.facultySubjects.length === 0 ? (
             <EmptyState text="No subjects assigned" icon={BookOpen} />
           ) : (
             <div className="space-y-2 mt-5">
               {data.facultySubjects.map((sub) => (
-                <div key={sub._id} className="p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
+                <div
+                  key={sub._id}
+                  onClick={() => navigate(`/faculty/attendance/${sub._id}`)}  // ← navigate to subject attendance
+                  className="p-3 bg-gray-50 rounded-xl hover:bg-indigo-50 transition-colors cursor-pointer group"
+                >
                   <p className="text-sm font-medium text-gray-800">{sub.name}</p>
                   <p className="text-xs text-gray-400 mt-1">
                     <span className="inline-flex items-center gap-1 bg-gray-200/60 px-1.5 py-0.5 rounded text-[10px] font-medium text-gray-500">
@@ -433,9 +500,11 @@ function FacultyDashboard({ data, user }) {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Attendance Overview */}
         <Card>
-          <SectionTitle icon={BarChart3} title="Attendance Overview" />
+          <SectionTitle
+            icon={BarChart3} title="Attendance Overview"
+            action={{ label: "Details", onClick: () => navigate("/faculty/attendance") }}
+          />
           {data.facultyAttendanceStats.length === 0 ? (
             <EmptyState text="No attendance data yet" icon={BarChart3} />
           ) : (
@@ -443,9 +512,15 @@ function FacultyDashboard({ data, user }) {
               {data.facultyAttendanceStats.map((item) => {
                 const avg = item.stats?.averagePercentage || 0;
                 return (
-                  <div key={item.subject?._id}>
+                  <div
+                    key={item.subject?._id}
+                    onClick={() => navigate(`/faculty/attendance/${item.subject?._id}`)}  // ← click to drill down
+                    className="cursor-pointer group"
+                  >
                     <div className="flex justify-between text-sm mb-2">
-                      <span className="font-medium text-gray-700">{item.subject?.name || "Subject"}</span>
+                      <span className="font-medium text-gray-700 group-hover:text-indigo-600 transition-colors">
+                        {item.subject?.name || "Subject"}
+                      </span>
                       <span className={`font-bold text-sm ${avg >= 75 ? "text-emerald-600" : avg >= 50 ? "text-amber-600" : "text-red-600"}`}>
                         {avg}%
                       </span>
@@ -462,15 +537,22 @@ function FacultyDashboard({ data, user }) {
           )}
         </Card>
 
-        {/* Recent Notices */}
         <Card>
-          <SectionTitle icon={Megaphone} title="Recent Notices" count={data.notices.length} />
+          <SectionTitle
+            icon={Megaphone} title="Recent Notices"
+            count={data.notices.length}
+            action={{ label: "View All", onClick: () => navigate("/notices") }}
+          />
           {data.notices.length === 0 ? (
             <EmptyState text="No notices" icon={Bell} />
           ) : (
             <div className="space-y-3 mt-5">
               {data.notices.slice(0, 5).map((notice) => (
-                <NoticeItem key={notice._id} notice={notice} />
+                <NoticeItem
+                  key={notice._id}
+                  notice={notice}
+                  onClick={() => navigate("/notices")}
+                />
               ))}
             </div>
           )}
@@ -483,12 +565,9 @@ function FacultyDashboard({ data, user }) {
 
 // ─── STUDENT DASHBOARD ──────────────────
 
-function StudentDashboard({ data, user }) {
+function StudentDashboard({ data, user, navigate }) {  // ← accept navigate
   const date = new Date();
-
-const todayDay = date.toLocaleDateString("en-US", {
-    weekday: "long"
-});
+  const todayDay = date.toLocaleDateString("en-US", { weekday: "long" });
 
   const todayClasses = useMemo(() => {
     return (data.studentTimetable?.entries || []).filter(
@@ -560,24 +639,33 @@ const todayDay = date.toLocaleDateString("en-US", {
     <>
       {/* Stats */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
-        <StatCard label="Attendance"
+        <StatCard
+          label="Attendance"
           value={overallAttendance !== null ? `${overallAttendance}%` : "—"}
           icon={CheckCircle}
           color={overallAttendance === null ? "blue" : overallAttendance >= 75 ? "emerald" : overallAttendance >= 50 ? "amber" : "rose"}
           sub={validAttendance.length > 0 ? `${validAttendance.length} subject${validAttendance.length !== 1 ? "s" : ""} tracked` : "No classes yet"}
-          trend={overallAttendance >= 75 ? "up" : overallAttendance !== null ? "down" : undefined} />
-        <StatCard label="Today's Classes" value={todayClasses.length}
-          icon={Clock} color="blue" sub={todayDay} />
-        {/* <StatCard label="Marks Published" value={publishedMarksCount}
-          icon={Award} color="violet"
-          sub={data.marks.length > 0 ? `of ${data.marks.length} subjects` : "No marks yet"} /> */}
-        <StatCard label="Notices" value={data.notices.length}
-          icon={Bell} color="amber" sub="Active notices" />
+          trend={overallAttendance >= 75 ? "up" : overallAttendance !== null ? "down" : undefined}
+          onClick={() => navigate("/attendance")}
+        />
+        <StatCard
+          label="Today's Classes" value={todayClasses.length}
+          icon={Clock} color="blue" sub={todayDay}
+          onClick={() => navigate("/student/timetable")}
+        />
+        <StatCard
+          label="Notices" value={data.notices.length}
+          icon={Bell} color="amber" sub="Active notices"
+          onClick={() => navigate("/notices")}
+        />
       </div>
 
-      {/* Low Attendance Alert */}
+      {/* Low Attendance Alert — clicking goes to attendance page */}
       {lowAttendance.length > 0 && (
-        <div className="bg-gradient-to-r from-red-50 to-orange-50 border border-red-200/60 rounded-2xl p-5 mb-6 shadow-sm">
+        <div
+          onClick={() => navigate("/student/attendance")}
+          className="bg-gradient-to-r from-red-50 to-orange-50 border border-red-200/60 rounded-2xl p-5 mb-6 shadow-sm cursor-pointer hover:shadow-md transition-shadow"
+        >
           <div className="flex items-start gap-4">
             <div className="w-10 h-10 bg-red-100 rounded-xl flex items-center justify-center flex-shrink-0">
               <AlertCircle className="w-5 h-5 text-red-600" />
@@ -611,14 +699,18 @@ const todayDay = date.toLocaleDateString("en-US", {
                 })}
               </div>
             </div>
+            {/* Hint arrow */}
+            <ChevronRight className="w-5 h-5 text-red-300 self-center flex-shrink-0" />
           </div>
         </div>
       )}
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-        {/* Today's Schedule */}
         <Card className="lg:col-span-3">
-          <SectionTitle icon={Timer} title={`Today's Schedule — ${todayDay}`} />
+          <SectionTitle
+            icon={Timer} title={`Today's Schedule — ${todayDay}`}
+            action={{ label: "Full Timetable", onClick: () => navigate("/student/timetable") }}
+          />
           {todayClasses.length === 0 ? (
             <EmptyState text="No classes today — enjoy your day!" icon={Sparkles} />
           ) : (
@@ -631,59 +723,14 @@ const todayDay = date.toLocaleDateString("en-US", {
             </div>
           )}
         </Card>
-
-        {/* Marks Summary */}
-        {/* <Card>
-          <SectionTitle icon={Award} title="Marks Overview" />
-          {data.marks.length === 0 ? (
-            <EmptyState text="No marks published yet" icon={Award} />
-          ) : (
-            <div className="mt-5">
-              {marksSummary && (
-                <div className="text-center p-5 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl mb-5 border border-blue-100/50">
-                  <div className="relative inline-flex items-center justify-center">
-                    <svg className="w-24 h-24 -rotate-90">
-                      <circle cx="48" cy="48" r="40" fill="none" stroke="#E0E7FF" strokeWidth="8" />
-                      <circle cx="48" cy="48" r="40" fill="none" stroke="#4F46E5" strokeWidth="8"
-                        strokeLinecap="round" strokeDasharray={`${(marksSummary.percentage / 100) * 251.2} 251.2`} />
-                    </svg>
-                    <span className="absolute text-xl font-bold text-indigo-700">{marksSummary.percentage}%</span>
-                  </div>
-                  <p className="text-xs text-indigo-400 mt-2 font-medium">
-                    {marksSummary.obtained} / {marksSummary.max} overall
-                  </p>
-                </div>
-              )}
-
-              <div className="space-y-3">
-                {data.marks.slice(0, 5).map((m) => {
-                  const published = m.publishedComponents || [];
-                  if (published.length === 0) return null;
-                  return (
-                    <div key={m._id} className="flex items-center justify-between p-2 rounded-xl hover:bg-gray-50 transition-colors">
-                      <div className="min-w-0 flex-1">
-                        <p className="text-sm font-medium text-gray-700 truncate">{m.subject?.name || "Subject"}</p>
-                        <p className="text-[10px] text-gray-400 mt-0.5">{published.join(" • ")}</p>
-                      </div>
-                      <div className="flex gap-1.5 ml-3">
-                        {published.includes("mst1") && <MarkBadge label="M1" value={m.mst1Marks} max={25} />}
-                        {published.includes("mst2") && <MarkBadge label="M2" value={m.mst2Marks} max={25} />}
-                        {published.includes("assignment") && <MarkBadge label="A" value={m.assignmentMarks} max={10} />}
-                        {published.includes("practical") && <MarkBadge label="P" value={m.practicalMarks} max={40} />}
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          )}
-        </Card> */}
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Attendance Breakdown */}
         <Card>
-          <SectionTitle icon={Activity} title="Attendance Breakdown" />
+          <SectionTitle
+            icon={Activity} title="Attendance Breakdown"
+            action={{ label: "Full Report", onClick: () => navigate("/student/dashboard") }}
+          />
           {validAttendance.length === 0 && pendingSubjects.length === 0 ? (
             <EmptyState text="No attendance data" icon={Activity} />
           ) : (
@@ -712,7 +759,6 @@ const todayDay = date.toLocaleDateString("en-US", {
                         </div>
                         <ProgressBar value={parseFloat(pct)} max={100}
                           color={parseFloat(pct) >= 75 ? "emerald" : parseFloat(pct) >= 50 ? "amber" : "red"} />
-
                         <div className="mt-2">
                           {!isLow && skippable !== null && skippable > 0 && (
                             <p className="text-[11px] text-emerald-600 flex items-center gap-1">
@@ -760,15 +806,22 @@ const todayDay = date.toLocaleDateString("en-US", {
           )}
         </Card>
 
-        {/* Notices */}
         <Card>
-          <SectionTitle icon={Megaphone} title="Recent Notices" count={data.notices.length} />
+          <SectionTitle
+            icon={Megaphone} title="Recent Notices"
+            count={data.notices.length}
+            action={{ label: "View All", onClick: () => navigate("/notices") }}
+          />
           {data.notices.length === 0 ? (
             <EmptyState text="No notices" icon={Bell} />
           ) : (
             <div className="space-y-3 mt-5">
               {data.notices.slice(0, 5).map((notice) => (
-                <NoticeItem key={notice._id} notice={notice} />
+                <NoticeItem
+                  key={notice._id}
+                  notice={notice}
+                  onClick={() => navigate("/notices")}
+                />
               ))}
             </div>
           )}
@@ -789,7 +842,8 @@ function Card({ children, className = "" }) {
   );
 }
 
-function StatCard({ label, value, icon: Icon, color, sub, trend }) {
+// ↓ StatCard now accepts onClick
+function StatCard({ label, value, icon: Icon, color, sub, trend, onClick }) {
   const colorMap = {
     blue: { bg: "bg-blue-50", text: "text-blue-600", ring: "ring-blue-100" },
     indigo: { bg: "bg-indigo-50", text: "text-indigo-600", ring: "ring-indigo-100" },
@@ -802,7 +856,10 @@ function StatCard({ label, value, icon: Icon, color, sub, trend }) {
   const c = colorMap[color] || colorMap.blue;
 
   return (
-    <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-xl hover:shadow-2xl transition-all duration-500 group relative overflow-hidden">
+    <div
+      onClick={onClick}
+      className={`bg-white border border-gray-100 rounded-2xl p-6 shadow-xl hover:shadow-2xl transition-all duration-500 group relative overflow-hidden ${onClick ? "cursor-pointer hover:-translate-y-0.5" : ""}`}
+    >
       <div className="flex items-start justify-between">
         <div>
           <p className="text-sm text-gray-500 font-medium">{label}</p>
@@ -821,11 +878,16 @@ function StatCard({ label, value, icon: Icon, color, sub, trend }) {
           <Icon className="w-6 h-6" />
         </div>
       </div>
+      {/* Subtle arrow hint when clickable */}
+      {onClick && (
+        <ChevronRight className="absolute bottom-4 right-4 w-3.5 h-3.5 text-gray-200 group-hover:text-gray-400 group-hover:translate-x-0.5 transition-all" />
+      )}
     </div>
   );
 }
 
-function SectionTitle({ icon: Icon, title, count }) {
+// ↓ SectionTitle now accepts an optional action button
+function SectionTitle({ icon: Icon, title, count, action }) {
   return (
     <div className="flex items-center justify-between">
       <div className="flex items-center gap-2.5">
@@ -834,11 +896,23 @@ function SectionTitle({ icon: Icon, title, count }) {
         </div>
         <h3 className="text-sm font-bold text-gray-800">{title}</h3>
       </div>
-      {count !== undefined && (
-        <span className="text-[10px] font-semibold text-gray-400 bg-gray-100 px-2 py-1 rounded-lg">
-          {count}
-        </span>
-      )}
+      <div className="flex items-center gap-2">
+        {count !== undefined && (
+          <span className="text-[10px] font-semibold text-gray-400 bg-gray-100 px-2 py-1 rounded-lg">
+            {count}
+          </span>
+        )}
+        {/* ↓ "View All" / action button */}
+        {action && (
+          <button
+            onClick={action.onClick}
+            className="text-[10px] font-semibold text-blue-600 hover:text-blue-700 bg-blue-50 hover:bg-blue-100 px-2.5 py-1 rounded-lg transition-colors flex items-center gap-1"
+          >
+            {action.label}
+            <ChevronRight className="w-3 h-3" />
+          </button>
+        )}
+      </div>
     </div>
   );
 }
@@ -908,7 +982,8 @@ function ScheduleItem({ entry, idx, color = "blue", showFaculty = false }) {
   );
 }
 
-function NoticeItem({ notice }) {
+// ↓ NoticeItem now accepts onClick
+function NoticeItem({ notice, onClick }) {
   const priorityConfig = {
     urgent: { bg: "bg-red-100", text: "text-red-600", dot: "bg-red-500" },
     important: { bg: "bg-amber-100", text: "text-amber-600", dot: "bg-amber-500" },
@@ -917,7 +992,10 @@ function NoticeItem({ notice }) {
   const p = priorityConfig[notice.priority] || priorityConfig.normal;
 
   return (
-    <div className="flex gap-3.5 p-3.5 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors group">
+    <div
+      onClick={onClick}
+      className={`flex gap-3.5 p-3.5 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors group ${onClick ? "cursor-pointer" : ""}`}
+    >
       <div className={`w-9 h-9 ${p.bg} rounded-xl flex items-center justify-center flex-shrink-0`}>
         <FileText className={`w-4 h-4 ${p.text}`} />
       </div>
@@ -948,6 +1026,10 @@ function NoticeItem({ notice }) {
           </span>
         </div>
       </div>
+      {/* Arrow on hover */}
+      {onClick && (
+        <ChevronRight className="w-4 h-4 text-gray-300 self-center opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all flex-shrink-0" />
+      )}
     </div>
   );
 }
@@ -962,7 +1044,7 @@ function MarkBadge({ label, value, max }) {
         : pct >= 40
           ? "bg-amber-100 text-amber-700 ring-1 ring-amber-200"
           : "bg-red-100 text-red-700 ring-1 ring-red-200"
-      }`}
+    }`}
       title={`${label}: ${value ?? "—"}/${max}`}>
       {label}:{value ?? "—"}
     </div>

@@ -20,6 +20,7 @@ import AdminTimetableEditor from "./pages/AdminTimetableEditor";
 import FacultyTimetable from "./pages/FacultyTimetable";
 import StudentTimetable from "./pages/StudentTimetable";
 import Assignments from "./pages/Assignments";
+import FacultySubjects from "./pages/FacultySubjects";
 
 function App() {
 
@@ -132,6 +133,7 @@ function App() {
 
         // Faculty route
         <Route path="/faculty/timetable" element={<FacultyTimetable />} />
+        <Route path="/faculty/subjects" element={<FacultySubjects />} />
 
         // Student route
         <Route path="/student/timetable" element={<StudentTimetable />} />

@@ -33,6 +33,7 @@ export default function Sidebar() {
     faculty: [
       { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
       { to: "/faculty/timetable", label: "My Timetable", icon: Calendar },
+      { to: "/faculty/subjects", label: "My Subjects", icon: BookOpen },
       { to: "/faculty/attendance", label: "Mark Attendance", icon: ClipboardCheck },
       { to: "/faculty/history", label: "Attendance History", icon: FileText },
       { to: "/faculty/marks", label: "Marks", icon: GraduationCap },
