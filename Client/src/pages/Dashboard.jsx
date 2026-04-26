@@ -485,7 +485,6 @@ function FacultyDashboard({ data, user }) {
 
 function StudentDashboard({ data, user }) {
   const date = new Date();
-date.setDate(date.getDate() - 2);
 
 const todayDay = date.toLocaleDateString("en-US", {
     weekday: "long"
