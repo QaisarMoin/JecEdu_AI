@@ -115,7 +115,7 @@ export default function Dashboard() {
     return (
       <div className="flex min-h-screen bg-gray-50">
         <Sidebar />
-        <div className="flex-1 ml-64 flex items-center justify-center">
+        <div className="flex-1 lg:ml-64 flex items-center justify-center pt-16 lg:pt-0">
           <div className="text-center">
             <div className="relative">
               <div className="w-16 h-16 border-4 border-blue-100 rounded-full mx-auto" />
@@ -131,9 +131,9 @@ export default function Dashboard() {
   return (
     <div className="flex min-h-screen bg-gray-50">
       <Sidebar />
-      <div className="flex-1 ml-64">
+      <div className="flex-1 lg:ml-64 pt-16 lg:pt-0">
         {/* Hero Header */}
-        <div className="bg-gradient-to-br from-slate-900 via-slate-800 to-blue-900 px-8 pt-8 pb-24 relative overflow-hidden">
+        <div className="bg-gradient-to-br from-slate-900 via-slate-800 to-blue-900 px-4 lg:px-8 pt-8 pb-24 relative overflow-hidden">
           {/* Background decoration */}
           <div className="absolute inset-0 overflow-hidden">
             <div className="absolute -top-40 -right-40 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl" />
@@ -149,7 +149,7 @@ export default function Dashboard() {
         </div>
 
         {/* Main Content */}
-        <div className="max-w-6xl mx-auto px-8 -mt-16 pb-8 relative">
+        <div className="max-w-6xl mx-auto px-4 lg:px-8 -mt-16 pb-8 relative">
           {user.role === "admin" && <AdminDashboard data={data} user={user} />}
           {user.role === "faculty" && <FacultyDashboard data={data} user={user} />}
           {user.role === "student" && <StudentDashboard data={data} user={user} />}
@@ -177,10 +177,8 @@ function DashboardHeader({ user }) {
   return (
     <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
       <div>
-        <div className="flex items-center gap-2 mb-1">
-          <p className="text-sm text-blue-300 font-medium">{getGreeting()}</p>
-        </div>
-        <h1 className="text-3xl font-bold text-white tracking-tight">
+        <p className="text-sm text-blue-300 font-medium mb-1">{getGreeting()}</p>
+        <h1 className="text-2xl sm:text-3xl font-bold text-white tracking-tight leading-tight">
           {user?.name || "User"}
         </h1>
         <div className="flex items-center gap-3 mt-3">
@@ -562,7 +560,7 @@ const todayDay = date.toLocaleDateString("en-US", {
   return (
     <>
       {/* Stats */}
-      <div className="grid grid-cols-3 lg:grid-cols-3 gap-4 mb-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
         <StatCard label="Attendance"
           value={overallAttendance !== null ? `${overallAttendance}%` : "—"}
           icon={CheckCircle}

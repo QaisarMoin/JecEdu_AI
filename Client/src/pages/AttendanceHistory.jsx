@@ -119,7 +119,7 @@ export default function AttendanceHistory() {
     <div className="flex min-h-screen bg-gray-100">
       <Sidebar />
 
-      <div className="flex-1 p-8 ml-64">
+      <div className="flex-1 p-4 lg:p-8 lg:ml-64 pt-20 lg:pt-8">
         {/* Header */}
         <div className="mb-10">
           <h1 className="text-3xl font-bold text-gray-800">

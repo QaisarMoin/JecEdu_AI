@@ -133,7 +133,7 @@ export default function AdminSubjects() {
     <div className="flex min-h-screen bg-gray-100">
   <Sidebar />
 
-  <div className="flex-1 p-8 ml-64">
+  <div className="flex-1 p-4 lg:p-8 lg:ml-64 pt-20 lg:pt-8 overflow-x-hidden">
         {/* Page Header */}
         <div className="mb-8">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -684,7 +684,7 @@ export default function AdminSubjects() {
           ) : (
             /* Subjects Table */
             <div className="overflow-x-auto">
-              <table className="w-full">
+              <table className="w-full border-collapse min-w-[800px] md:min-w-full">
                 <thead>
                   <tr className="bg-gray-50/80">
                     <th className="text-left px-6 py-3.5 text-xs font-semibold text-gray-500 uppercase tracking-wider">
@@ -713,20 +713,35 @@ export default function AdminSubjects() {
                       key={subject._id}
                       className="hover:bg-indigo-50/40 transition-colors duration-150"
                     >
-                      <td className="px-6 py-4">
-                        <div className="flex items-center gap-3">
+                      <td className="px-4 py-4">
+                        <div className="flex items-start gap-3">
                           <div className="w-10 h-10 bg-gradient-to-br from-indigo-100 to-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
                             <span className="text-sm font-bold text-indigo-600">
                               {subject.name?.charAt(0)?.toUpperCase()}
                             </span>
                           </div>
-                          <div>
+                          <div className="min-w-0">
                             <p className="font-semibold text-gray-900 text-sm">
                               {subject.name}
                             </p>
-                            <p className="text-xs text-gray-500 md:hidden">
+                            <p className="text-xs text-gray-500">
                               {subject.code}
                             </p>
+                            {/* Mobile-only action buttons */}
+                            <div className="flex gap-2 mt-2 sm:hidden">
+                              <button
+                                onClick={() => handleEdit(subject)}
+                                className="text-xs text-indigo-600 font-semibold bg-indigo-50 px-2.5 py-1 rounded-lg hover:bg-indigo-100"
+                              >
+                                Edit
+                              </button>
+                              <button
+                                onClick={() => handleDelete(subject._id)}
+                                className="text-xs text-red-500 font-semibold bg-red-50 px-2.5 py-1 rounded-lg hover:bg-red-100"
+                              >
+                                Delete
+                              </button>
+                            </div>
                           </div>
                         </div>
                       </td>
@@ -762,7 +777,7 @@ export default function AdminSubjects() {
                           {subject.department || "—"}
                         </span>
                       </td>
-                      <td className="px-6 py-4">
+                      <td className="px-4 py-4 hidden sm:table-cell">
                         <span
                           className={`inline-flex items-center px-2.5 py-1 text-xs font-semibold rounded-lg border ${getSemesterColor(
                             subject.semester
@@ -771,7 +786,8 @@ export default function AdminSubjects() {
                           Sem {subject.semester}
                         </span>
                       </td>
-                      <td className="px-6 py-4 text-right">
+                      {/* Desktop actions */}
+                      <td className="px-4 py-4 text-right hidden sm:table-cell">
                         <div className="flex items-center justify-end gap-2">
                           <button
                             onClick={() => handleEdit(subject)}

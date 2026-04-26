@@ -67,7 +67,7 @@ export default function Attendance() {
             <Sidebar />
       
             
-      <div className="flex-1 p-8 ml-64">
+      <div className="flex-1 p-4 lg:p-8 lg:ml-64 pt-20 lg:pt-8">
         <div className=" mx-auto px-4 sm:px-6 lg:px-8 py-8">
           {/* Header */}
           <div className="mb-8">

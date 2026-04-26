@@ -50,15 +50,15 @@ export default function AdminTimetableList() {
 
             <Sidebar />
 
-            <div className="flex-1 p-8 ml-64">
+            <div className="flex-1 p-4 lg:p-8 lg:ml-64 pt-20 lg:pt-8">
 
                 <div className="max-w-6xl mx-auto">
 
                     {/* Header */}
-                    <div className="flex items-center justify-between mb-8">
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
 
                         <div>
-                            <h1 className="text-3xl font-bold text-gray-800">
+                            <h1 className="text-2xl md:text-3xl font-bold text-gray-800">
                                 Timetable Management
                             </h1>
                             <p className="text-gray-500 mt-1">
@@ -68,7 +68,7 @@ export default function AdminTimetableList() {
 
                         <button
                             onClick={() => navigate("/admin/timetable/generate")}
-                            className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-6 py-3 rounded-xl font-semibold hover:from-indigo-700 hover:to-purple-700 shadow-lg hover:shadow-xl transition-all"
+                            className="w-full sm:w-auto bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-6 py-3 rounded-xl font-semibold hover:from-indigo-700 hover:to-purple-700 shadow-lg hover:shadow-xl transition-all"
                         >
                             + Generate New Timetable
                         </button>
@@ -149,14 +149,14 @@ export default function AdminTimetableList() {
                                 <div
                                     key={w._id}
                                     onClick={() => navigate(`/admin/timetable/edit/${w._id}`)}
-                                    className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6 hover:shadow-2xl hover:border-indigo-200 transition-all duration-300 cursor-pointer group flex items-center justify-between"
+                                    className="bg-white rounded-2xl shadow-lg border border-gray-100 p-5 hover:shadow-2xl hover:border-indigo-200 transition-all duration-300 cursor-pointer group"
                                 >
 
-                                    <div className="flex items-center justify-between">
+                                    <div className="flex items-start justify-between">
 
                                         <div>
 
-                                            <div className="flex items-center gap-3 mb-1">
+                                            <div className="flex items-center gap-2 flex-wrap mb-1">
 
                                                 <h3 className="font-bold text-gray-800 text-lg">
                                                     Semester {w.semester}

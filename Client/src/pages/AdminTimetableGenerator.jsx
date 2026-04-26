@@ -280,14 +280,14 @@ export default function AdminTimetableGenerator() {
 
             <Sidebar />
 
-            <div className="flex-1 p-8 ml-64">
+            <div className="flex-1 p-4 lg:p-8 lg:ml-64 pt-20 lg:pt-8">
 
                 <div className="max-w-5xl mx-auto">
 
                     {/* Header */}
                     <div className="mb-8">
 
-                        <h1 className="text-3xl font-bold text-gray-800">
+                        <h1 className="text-2xl md:text-3xl font-bold text-gray-800">
                             Generate New Timetable
                         </h1>
 
@@ -408,7 +408,7 @@ export default function AdminTimetableGenerator() {
                     {/* ========== TIME SLOTS ========== */}
                     <div className="bg-white rounded-xl shadow-sm border p-6 mb-6">
 
-                        <div className="flex items-center justify-between mb-4">
+                        <div className="flex items-center flex-col sm:flex-row sm:justify-between gap-3 mb-4">
 
                             <h2 className="text-xl font-semibold text-gray-700">
                                 Time Slots Configuration
@@ -477,7 +477,7 @@ export default function AdminTimetableGenerator() {
 
 
                         {/* Add New Slot */}
-                        <div className="flex items-center gap-3 p-3 bg-indigo-50 rounded-lg border border-indigo-100">
+                        <div className="flex flex-wrap items-center gap-3 p-3 bg-indigo-50 rounded-lg border border-indigo-100">
 
                             <span className="text-sm text-indigo-600 font-medium">Add:</span>
 
@@ -770,7 +770,7 @@ export default function AdminTimetableGenerator() {
 
 
                     {/* Generate Button */}
-                    <div className="flex justify-between items-center">
+                    <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
 
                         <button
                             onClick={() => navigate("/admin/timetable")}

@@ -36,7 +36,7 @@ export default function Subjects() {
     <div className="flex min-h-screen bg-gray-50">
       <Sidebar />
 
-      <div className="flex-1 p-6 lg:p-8 ml-64">
+      <div className="flex-1 p-4 lg:p-6 lg:p-8 lg:ml-64 pt-20 md:pt-6 lg:pt-8">
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-1">

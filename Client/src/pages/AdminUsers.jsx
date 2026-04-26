@@ -150,14 +150,15 @@ export default function AdminUsers() {
     <div className="flex min-h-screen bg-gray-100">
       <Sidebar />
 
-      <div className="flex-1 p-8 ml-64">
+      <div className="flex-1 p-4 lg:p-8 lg:ml-64 pt-20 lg:pt-8 overflow-x-hidden">
+
         {/* Header */}
-        <div className="flex justify-between items-center mb-6">
+        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-6">
           <div>
-            <h1 className="text-3xl font-bold text-gray-800">
+            <h1 className="text-2xl md:text-3xl font-bold text-gray-800">
               User Management
             </h1>
-            <p className="text-gray-500">
+            <p className="text-gray-500 text-sm mt-1">
               Create, manage and oversee all department users.
             </p>
           </div>
@@ -165,18 +166,10 @@ export default function AdminUsers() {
           <button
             onClick={() => {
               setEditingUser(null);
-              setForm({
-                name: "",
-                email: "",
-                password: "",
-                role: "student",
-                rollNo: "",
-                department: "",
-                semester: ""
-              });
+              setForm({ name: "", email: "", password: "", role: "student", rollNo: "", department: "", semester: "" });
               setShowModal(true);
             }}
-            className="bg-indigo-600 text-white px-5 py-2.5 rounded-lg hover:bg-indigo-700"
+            className="w-full sm:w-auto bg-indigo-600 text-white px-5 py-2.5 rounded-lg hover:bg-indigo-700"
           >
             + Add New User
           </button>
@@ -212,19 +205,20 @@ export default function AdminUsers() {
 
         {/* Table */}
         <div className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden mb-12">
-          <table className="w-full">
+          <div className="overflow-x-auto">
+          <table className="w-full border-collapse min-w-[800px] md:min-w-full">
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase">
+                <th className="px-4 py-4 text-left text-xs font-semibold text-gray-600 uppercase">
                   Name
                 </th>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase">
+                <th className="hidden sm:table-cell px-4 py-4 text-left text-xs font-semibold text-gray-600 uppercase">
                   Email
                 </th>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase">
+                <th className="hidden sm:table-cell px-4 py-4 text-left text-xs font-semibold text-gray-600 uppercase">
                   Role
                 </th>
-                <th className="px-6 py-4 text-right text-xs font-semibold text-gray-600 uppercase">
+                <th className="px-4 py-4 text-right text-xs font-semibold text-gray-600 uppercase">
                   Actions
                 </th>
               </tr>
@@ -233,19 +227,24 @@ export default function AdminUsers() {
             <tbody>
               {currentUsers.map((user) => (
                 <tr key={user._id} className="hover:bg-gray-50">
-                  <td className="px-6 py-4">{user.name}</td>
-                  <td className="px-6 py-4 text-gray-500">{user.email}</td>
-                  <td className="px-6 py-4 capitalize">{user.role}</td>
-                  <td className="px-6 py-4 text-right flex justify-end gap-3">
+                  <td className="px-4 py-4">
+                    <div>
+                      <p className="font-medium text-gray-800">{user.name}</p>
+                      <p className="text-xs text-gray-400 sm:hidden">{user.email}</p>
+                    </div>
+                  </td>
+                  <td className="hidden sm:table-cell px-4 py-4 text-gray-500">{user.email}</td>
+                  <td className="hidden sm:table-cell px-4 py-4 capitalize">{user.role}</td>
+                  <td className="px-4 py-4 text-right flex justify-end gap-3">
                     <button
                       onClick={() => handleEdit(user)}
-                      className="text-indigo-600 hover:text-indigo-800 font-medium"
+                      className="text-indigo-600 hover:text-indigo-800 font-medium text-sm"
                     >
                       Edit
                     </button>
                     <button
                       onClick={() => deleteUser(user._id)}
-                      className="text-red-600 hover:text-red-800"
+                      className="text-red-600 hover:text-red-800 text-sm"
                     >
                       Delete
                     </button>
@@ -254,6 +253,7 @@ export default function AdminUsers() {
               ))}
             </tbody>
           </table>
+          </div>
 
           {/* Pagination */}
           <div className="flex justify-end gap-2 p-4">

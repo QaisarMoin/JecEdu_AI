@@ -183,7 +183,7 @@ export default function AdminTimetableEditor() {
     return (
       <div className="flex min-h-screen bg-gray-50">
         <Sidebar />
-        <div className="flex-1 p-8 ml-64 flex items-center justify-center">
+        <div className="flex-1 p-4 lg:p-6 lg:ml-64 flex items-center justify-center pt-20 lg:pt-8">
           <div className="text-xl text-gray-400">Loading...</div>
         </div>
       </div>
@@ -194,7 +194,7 @@ export default function AdminTimetableEditor() {
     return (
       <div className="flex min-h-screen bg-gray-50">
         <Sidebar />
-        <div className="flex-1 p-8 ml-64 flex items-center justify-center">
+        <div className="flex-1 p-4 lg:p-8 lg:ml-64 flex items-center justify-center pt-20 lg:pt-8">
           <div className="text-xl text-red-400">
             Timetable week not found
           </div>
@@ -218,11 +218,11 @@ export default function AdminTimetableEditor() {
   return (
     <div className="flex min-h-screen bg-gray-50">
       <Sidebar />
-      <div className="flex-1 p-6 ml-64">
+      <div className="flex-1 p-4 lg:p-6 lg:ml-64 pt-20 md:pt-6">
         {/* Header */}
-        <div className="flex flex-wrap items-center justify-between mb-6 gap-4">
+        <div className="flex flex-col sm:flex-row flex-wrap sm:items-center sm:justify-between mb-6 gap-4">
           <div>
-            <h1 className="text-2xl font-bold text-gray-800">
+            <h1 className="text-2xl md:text-2xl font-bold text-gray-800">
               Timetable Editor
             </h1>
             <p className="text-gray-500 text-sm mt-1">
@@ -335,7 +335,8 @@ export default function AdminTimetableEditor() {
         )}
 
         {/* Timetable Grid */}
-        <div id="admin-timetable-grid" className="bg-white rounded-xl shadow-sm border overflow-x-auto print:p-0">
+        <div id="admin-timetable-grid" className="bg-white rounded-xl shadow-sm border print:p-0">
+          <div className="overflow-x-auto">
           {/* Print only watermark/header */}
           <div className="hidden print:block mb-6 text-center border-b pb-4">
             <h1 className="text-2xl font-bold text-indigo-600">JEC TIMETABLE</h1>
@@ -482,6 +483,7 @@ export default function AdminTimetableEditor() {
               })}
             </tbody>
           </table>
+          </div>
         </div>
 
         {/* Edit Modal */}

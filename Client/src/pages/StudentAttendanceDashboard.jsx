@@ -9,6 +9,7 @@ export default function StudentAttendanceDashboard() {
     const [sortBy, setSortBy] = useState('name');
     const [selectedSubject, setSelectedSubject] = useState(null);
 
+    const [showControls, setShowControls] = useState(false);
     const MINIMUM_ATTENDANCE = 75;
 
     useEffect(() => {
@@ -150,68 +151,83 @@ export default function StudentAttendanceDashboard() {
         <div className="flex min-h-screen bg-slate-50">
             <Sidebar />
 
-            <div className="flex-1 ml-64">
+            <div className="flex-1 lg:ml-64 pt-16 lg:pt-0 overflow-x-hidden max-w-full">
                 {/* Top Header Bar */}
                 <div className="sticky top-0 z-10 bg-white/80 backdrop-blur-md border-b border-slate-200">
-                    <div className="px-8 py-4">
+                    <div className="px-4 lg:px-8 py-3 lg:py-4">
                         <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-4">
+                            <div className="flex items-center gap-2">
                                 <div className="flex items-center gap-3">
                                     <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-indigo-200">
                                         <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                                         </svg>
                                     </div>
-                                    <div>
-                                        <h1 className="text-xl font-semibold text-slate-800">Attendance Overview</h1>
-                                    </div>
+                                    <h1 className="text-xl font-semibold text-slate-800 leading-tight">Attendance<br className="sm:hidden" /> Overview</h1>
                                 </div>
                             </div>
 
                             {subjects.length > 0 && (
-                                <div className="flex items-center gap-3">
-                                    {/* Sort Dropdown */}
-                                    <div className="relative">
-                                        <select
-                                            value={sortBy}
-                                            onChange={(e) => setSortBy(e.target.value)}
-                                            className="appearance-none pl-4 pr-10 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium text-slate-700 focus:ring-2 focus:ring-indigo-500 focus:border-transparent cursor-pointer hover:bg-slate-100 transition-colors"
-                                        >
-                                            <option value="name">Sort: Name</option>
-                                            <option value="percentage">Sort: Attendance</option>
-                                            <option value="total">Sort: Classes</option>
-                                        </select>
-                                        <svg className="w-4 h-4 absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                <div className="flex items-center gap-2">
+                                    {/* Mobile Toggle Button */}
+                                    <button 
+                                        onClick={() => setShowControls(!showControls)}
+                                        className={`lg:hidden p-2.5 rounded-xl border transition-all ${
+                                            showControls 
+                                                ? 'bg-indigo-50 border-indigo-200 text-indigo-600' 
+                                                : 'bg-slate-50 border-slate-200 text-slate-600'
+                                        }`}
+                                    >
+                                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
                                         </svg>
-                                    </div>
+                                    </button>
 
-                                    {/* View Toggle */}
-                                    <div className="flex items-center bg-slate-100 rounded-xl p-1">
-                                        <button
-                                            onClick={() => setViewMode('cards')}
-                                            className={`p-2.5 rounded-lg transition-all duration-200 ${
-                                                viewMode === 'cards'
-                                                    ? 'bg-white shadow-sm text-indigo-600'
-                                                    : 'text-slate-500 hover:text-slate-700'
-                                            }`}
-                                        >
-                                            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                                                <path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                                    {/* Desktop Controls / Foldable Container */}
+                                    <div className={`${showControls ? 'flex' : 'hidden'} lg:flex absolute lg:relative top-[73px] lg:top-0 left-0 right-0 lg:left-auto lg:right-auto bg-white lg:bg-transparent border-b lg:border-none p-4 lg:p-0 items-center gap-3 z-20 shadow-lg lg:shadow-none animate-in fade-in slide-in-from-top-2 duration-200`}>
+                                        {/* Sort Dropdown */}
+                                        <div className="relative flex-1 lg:flex-none">
+                                            <select
+                                                value={sortBy}
+                                                onChange={(e) => setSortBy(e.target.value)}
+                                                className="w-full lg:w-auto appearance-none pl-4 pr-10 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium text-slate-700 focus:ring-2 focus:ring-indigo-500 focus:border-transparent cursor-pointer hover:bg-slate-100 transition-colors"
+                                            >
+                                                <option value="name">Sort: Name</option>
+                                                <option value="percentage">Sort: Attendance</option>
+                                                <option value="total">Sort: Classes</option>
+                                            </select>
+                                            <svg className="w-4 h-4 absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                                             </svg>
-                                        </button>
-                                        <button
-                                            onClick={() => setViewMode('list')}
-                                            className={`p-2.5 rounded-lg transition-all duration-200 ${
-                                                viewMode === 'list'
-                                                    ? 'bg-white shadow-sm text-indigo-600'
-                                                    : 'text-slate-500 hover:text-slate-700'
-                                            }`}
-                                        >
-                                            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                                                <path fillRule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clipRule="evenodd" />
-                                            </svg>
-                                        </button>
+                                        </div>
+
+                                        {/* View Toggle */}
+                                        <div className="flex items-center bg-slate-100 rounded-xl p-1">
+                                            <button
+                                                onClick={() => setViewMode('cards')}
+                                                className={`p-2.5 rounded-lg transition-all duration-200 ${
+                                                    viewMode === 'cards'
+                                                        ? 'bg-white shadow-sm text-indigo-600'
+                                                        : 'text-slate-500 hover:text-slate-700'
+                                                }`}
+                                            >
+                                                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                                                </svg>
+                                            </button>
+                                            <button
+                                                onClick={() => setViewMode('list')}
+                                                className={`p-2.5 rounded-lg transition-all duration-200 ${
+                                                    viewMode === 'list'
+                                                        ? 'bg-white shadow-sm text-indigo-600'
+                                                        : 'text-slate-500 hover:text-slate-700'
+                                                }`}
+                                            >
+                                                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path fillRule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clipRule="evenodd" />
+                                                </svg>
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             )}
@@ -219,7 +235,7 @@ export default function StudentAttendanceDashboard() {
                     </div>
                 </div>
 
-                <div className="p-8">
+                <div className="p-4 lg:p-8">
                     {/* Loading State */}
                     {loading ? (
                         <div className="flex flex-col items-center justify-center py-24">
@@ -289,7 +305,7 @@ export default function StudentAttendanceDashboard() {
                                         </div>
 
                                         {/* Quick Stats */}
-                                        <div className="grid grid-cols-4 gap-4">
+                                        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
                                             <div className="text-center p-4 rounded-xl bg-slate-50">
                                                 <p className="text-2xl font-bold text-slate-800">{stats.subjectCount}</p>
                                                 <p className="text-xs text-slate-500 mt-1">Subjects</p>
@@ -441,8 +457,8 @@ export default function StudentAttendanceDashboard() {
 
                             {/* List View */}
                             {viewMode === 'list' && (
-                                <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden">
-                                    <table className="w-full">
+                                <div className="bg-white rounded-2xl border border-slate-200 overflow-x-auto">
+                                    <table className="w-full min-w-[700px]">
                                         <thead>
                                             <tr className="border-b border-slate-100">
                                                 <th className="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">

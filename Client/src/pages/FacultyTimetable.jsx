@@ -87,7 +87,7 @@ export default function FacultyTimetable() {
   return (
     <div className="flex min-h-screen bg-gray-50">
       <Sidebar />
-      <div className="flex-1 p-8 ml-64">
+      <div className="flex-1 p-4 lg:p-8 lg:ml-64 pt-20 lg:pt-8">
         <div className="max-w-7xl mx-auto">
           <h1 className="text-3xl font-bold text-gray-800 mb-2">
             My Timetable

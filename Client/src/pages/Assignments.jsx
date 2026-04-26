@@ -25,6 +25,7 @@ export default function Assignments() {
   const [creating, setCreating] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   const [form, setForm] = useState({
     title: "",
@@ -127,18 +128,18 @@ export default function Assignments() {
     <div className="flex min-h-screen bg-gray-50">
       <Sidebar />
 
-      <div className="flex-1 ml-64">
+      <div className="flex-1 lg:ml-64 pt-16 lg:pt-0 overflow-x-hidden">
         {/* Header Section */}
-        <div className="bg-gradient-to-r from-indigo-700 to-blue-600 px-8 pt-10 pb-20">
+        <div className="bg-gradient-to-r from-indigo-700 to-blue-600 px-4 md:px-8 pt-8 pb-20">
           <div className="max-w-6xl mx-auto">
-            <div className="flex justify-between items-end">
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-end gap-4">
               <div>
                 <div className="flex items-center gap-3 mb-2 text-indigo-100">
                   <FileText className="w-5 h-5" />
                   <span className="text-sm font-medium tracking-wider uppercase">Academic Portal</span>
                 </div>
-                <h1 className="text-3xl font-bold text-white tracking-tight">Assignments</h1>
-                <p className="text-indigo-100/80 mt-2 max-w-lg">
+                <h1 className="text-2xl md:text-3xl font-bold text-white tracking-tight">Assignments</h1>
+                <p className="text-indigo-100/80 mt-2 text-sm md:text-base">
                   {isFaculty 
                     ? "Manage and track assignments for your classes." 
                     : "View all active assignments and deadlines for your semester."}
@@ -148,7 +149,7 @@ export default function Assignments() {
               {(isFaculty || isAdmin) && (
                 <button
                   onClick={() => setShowForm(!showForm)}
-                  className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold transition-all shadow-lg ${
+                  className={`self-start sm:self-auto flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold transition-all shadow-lg ${
                     showForm 
                     ? "bg-white/10 text-white backdrop-blur-md border border-white/20" 
                     : "bg-white text-indigo-700 hover:bg-indigo-50"
@@ -163,7 +164,7 @@ export default function Assignments() {
         </div>
 
         {/* Main Content */}
-        <div className="max-w-6xl mx-auto px-8 -mt-10">
+        <div className="max-w-6xl mx-auto px-4 md:px-8 -mt-10">
           
           {/* Create Form */}
           {showForm && (isFaculty || isAdmin) && (
@@ -265,21 +266,35 @@ export default function Assignments() {
 
           {/* List Section */}
           <div className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden min-h-[400px] mb-20">
-            <div className="p-6 border-b border-gray-100 bg-gray-50/30 flex items-center justify-between">
-              <div className="relative max-w-sm w-full">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                <input
-                  type="text"
-                  placeholder="Search assignments..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-10 pr-4 py-1.5 border rounded-lg text-sm bg-white focus:ring-2 focus:ring-indigo-500 outline-none"
-                />
-              </div>
-              <div className="flex items-center gap-4 text-xs font-semibold text-gray-400 uppercase tracking-wider">
-                <span>{filteredAssignments.length} Assignments Found</span>
+            <div className="p-4 lg:p-6 border-b border-gray-100 bg-gray-50/30">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <div className="flex items-center justify-between w-full sm:w-auto">
+                   <div className="flex items-center gap-2 text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                    <Filter className="w-3.5 h-3.5" />
+                    <span>{filteredAssignments.length} Assignments</span>
+                  </div>
+                  {/* Foldable Search Toggle for Mobile */}
+                  <button 
+                    onClick={() => setIsSearchOpen(!isSearchOpen)}
+                    className="sm:hidden p-2 text-gray-500 hover:bg-gray-100 rounded-lg transition-colors"
+                  >
+                    {isSearchOpen ? <X className="w-5 h-5" /> : <Search className="w-5 h-5" />}
+                  </button>
+                </div>
+
+                <div className={`relative w-full sm:max-w-sm transition-all duration-300 ${isSearchOpen ? 'block' : 'hidden sm:block'}`}>
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                  <input
+                    type="text"
+                    placeholder="Search assignments..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-xl text-sm bg-white focus:ring-2 focus:ring-indigo-500 outline-none shadow-sm"
+                  />
+                </div>
               </div>
             </div>
+
 
             {loading ? (
               <div className="flex flex-col items-center justify-center py-20">
