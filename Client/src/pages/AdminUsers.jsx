@@ -157,7 +157,7 @@ export default function AdminUsers() {
             <input
               type="text"
               placeholder="Search by name or email..."
-              className="w-full pl-10 pr-4 py-2 border rounded-lg"
+              className="w-full pl-10 pr-4 py-2  rounded-lg"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
@@ -166,7 +166,7 @@ export default function AdminUsers() {
           <select
             value={roleFilter}
             onChange={(e) => setRoleFilter(e.target.value)}
-            className="px-4 py-2 border rounded-lg"
+            className="px-4 py-2  rounded-lg"
           >
             <option value="all">Role: All</option>
             <option value="student">Student</option>
@@ -178,7 +178,7 @@ export default function AdminUsers() {
         {/* Table */}
         <div className="bg-white rounded-xl shadow-sm overflow-hidden">
           <table className="w-full">
-            <thead className="bg-gray-50 border-b">
+            <thead className="bg-gray-50">
               <tr>
                 <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase">
                   Name
@@ -195,7 +195,7 @@ export default function AdminUsers() {
               </tr>
             </thead>
 
-            <tbody className="divide-y">
+            <tbody>
               {currentUsers.map((user) => (
                 <tr key={user._id} className="hover:bg-gray-50">
                   <td className="px-6 py-4">{user.name}</td>
@@ -235,101 +235,119 @@ export default function AdminUsers() {
 
       {/* Modal */}
       {showModal && (
-  <div className="fixed inset-0 backdrop-blur-xl bg-opacity-70 flex justify-center items-center">
-    <div className="bg-white p-6 rounded-xl w-full max-w-md">
+  <div className="fixed inset-0 backdrop-blur-md bg-black/30 flex justify-center items-center z-50 p-4">
+    <div className="bg-white p-8 rounded-2xl w-full max-w-md shadow-2xl overflow-y-auto max-h-[90vh]">
       <h2 className="text-xl font-semibold mb-4">
         Create New User
       </h2>
 
-      {/* Name */}
-      <input
-        name="name"
-        value={form.name}
-        placeholder="Name *"
-        onChange={handleChange}
-        className="w-full border p-2 mb-3 rounded"
-      />
+      <div className="space-y-4">
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Full Name *</label>
+          <input
+            name="name"
+            value={form.name}
+            placeholder="Enter full name"
+            onChange={handleChange}
+            className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:bg-white transition-all outline-none text-sm"
+          />
+        </div>
 
-      {/* Email */}
-      <input
-        name="email"
-        value={form.email}
-        placeholder="Email *"
-        onChange={handleChange}
-        className="w-full border p-2 mb-3 rounded"
-      />
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Email Address *</label>
+          <input
+            name="email"
+            value={form.email}
+            placeholder="email@example.com"
+            onChange={handleChange}
+            className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:bg-white transition-all outline-none text-sm"
+          />
+        </div>
 
-      {/* Password */}
-      <input
-        name="password"
-        type="password"
-        value={form.password}
-        placeholder="Password *"
-        onChange={handleChange}
-        className="w-full border p-2 mb-3 rounded"
-      />
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Password *</label>
+          <input
+            name="password"
+            type="password"
+            value={form.password}
+            placeholder="••••••••"
+            onChange={handleChange}
+            className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:bg-white transition-all outline-none text-sm"
+          />
+        </div>
 
-      {/* Role */}
-      <select
-        name="role"
-        value={form.role}
-        onChange={handleChange}
-        className="w-full border p-2 mb-3 rounded"
-      >
-        <option value="student">Student</option>
-        <option value="faculty">Faculty</option>
-        <option value="admin">Admin</option>
-      </select>
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">User Role</label>
+          <select
+            name="role"
+            value={form.role}
+            onChange={handleChange}
+            className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:bg-white transition-all outline-none text-sm"
+          >
+            <option value="student">Student</option>
+            <option value="faculty">Faculty</option>
+            <option value="admin">Admin</option>
+          </select>
+        </div>
 
-      {/* Department (For ALL roles) */}
-      <input
-        name="department"
-        value={form.department}
-        placeholder="Department"
-        onChange={handleChange}
-        className="w-full border p-2 mb-3 rounded"
-      />
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Department</label>
+          <input
+            name="department"
+            value={form.department}
+            placeholder="e.g. Computer Science"
+            onChange={handleChange}
+            className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:bg-white transition-all outline-none text-sm"
+          />
+        </div>
+      </div>
 
       {/* Student Only Fields */}
       {form.role === "student" && (
-        <>
-          <input
-            name="rollNo"
-            value={form.rollNo}
-            placeholder="Roll Number *"
-            onChange={handleChange}
-            className="w-full border p-2 mb-3 rounded"
-          />
+        <div className="mt-4 space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Roll Number *</label>
+            <input
+              name="rollNo"
+              value={form.rollNo}
+              placeholder="Enter roll number"
+              onChange={handleChange}
+              className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:bg-white transition-all outline-none text-sm"
+            />
+          </div>
 
-          <select
-            name="semester"
-            value={form.semester}
-            onChange={handleChange}
-            className="w-full border p-2 mb-4 rounded"
-          >
-            <option value="">Select Semester</option>
-            {[1,2,3,4,5,6,7,8].map((sem) => (
-              <option key={sem} value={sem}>
-                Semester {sem}
-              </option>
-            ))}
-          </select>
-        </>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Semester</label>
+            <select
+              name="semester"
+              value={form.semester}
+              onChange={handleChange}
+              className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:bg-white transition-all outline-none text-sm"
+            >
+              <option value="">Select Semester</option>
+              {[1, 2, 3, 4, 5, 6, 7, 8].map((sem) => (
+                <option key={sem} value={sem}>
+                  Semester {sem}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
       )}
 
-      <div className="flex justify-end gap-3">
+      <div className="flex justify-end gap-3 mt-8">
         <button
           onClick={() => setShowModal(false)}
-          className="px-4 py-2 bg-gray-200 rounded"
+          className="px-5 py-2.5 bg-gray-100 text-gray-700 font-medium rounded-lg hover:bg-gray-200 transition-colors"
         >
           Cancel
         </button>
 
         <button
           onClick={createUser}
-          className="px-4 py-2 bg-indigo-600 text-white rounded"
+          className="px-5 py-2.5 bg-indigo-600 text-white font-medium rounded-lg hover:bg-indigo-700 shadow-lg shadow-indigo-200 transition-all"
         >
-          Create
+          Create User
         </button>
       </div>
     </div>

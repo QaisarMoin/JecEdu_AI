@@ -77,7 +77,7 @@ export default function AdminTimetableList() {
 
 
                     {/* Filter */}
-                    <div className="bg-white rounded-xl shadow-sm border p-4 mb-6 flex gap-4 items-center">
+                    <div className="bg-white rounded-xl shadow-sm  p-4 mb-6 flex gap-4 items-center">
 
                         <span className="text-sm font-medium text-gray-600">
                             Filter by Semester:
@@ -127,7 +127,7 @@ export default function AdminTimetableList() {
 
                     ) : weeks.length === 0 ? (
 
-                        <div className="text-center py-16 bg-white rounded-xl shadow-sm border">
+                        <div className="text-center py-16 bg-white rounded-xl shadow-sm ">
                             <div className="text-5xl mb-4">📅</div>
                             <p className="text-xl text-gray-400 mb-2">
                                 No timetables found
@@ -149,7 +149,7 @@ export default function AdminTimetableList() {
                                 <div
                                     key={w._id}
                                     onClick={() => navigate(`/admin/timetable/edit/${w._id}`)}
-                                    className="bg-white rounded-xl shadow-sm border p-5 hover:shadow-md hover:border-indigo-200 transition-all cursor-pointer group"
+                                    className="bg-white rounded-xl shadow-sm  p-5 hover:shadow-md hover:border-indigo-200 transition-all cursor-pointer group"
                                 >
 
                                     <div className="flex items-center justify-between">
