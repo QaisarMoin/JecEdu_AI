@@ -15,7 +15,10 @@ const assignmentRoutes = require("./routes/assignmentRoutes");
 
 const app = express();
 
-app.use(cors());
+app.use(cors({
+    origin: "*",
+    credentials: true
+}));
 app.use(express.json());
 
 console.log("MONGO_URI:", process.env.MONGO_URI);
