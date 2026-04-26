@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import Sidebar from "../components/Navbar";
 import API from "../services/api";
+import { Printer } from "lucide-react";
+import { printElement } from "../utils/printUtils";
 
 const DAYS = [
   "Monday",
@@ -90,9 +92,28 @@ export default function FacultyTimetable() {
           <h1 className="text-3xl font-bold text-gray-800 mb-2">
             My Timetable
           </h1>
-          <p className="text-gray-500 mb-6">
-            Welcome, {user.name}. Here is your teaching schedule.
-          </p>
+          <div className="flex justify-between items-center mb-6">
+            <div>
+              <p className="text-gray-500">
+                Welcome, {user.name}. Here is your teaching schedule.
+              </p>
+            </div>
+            <button
+              onClick={() => window.print()}
+              className="bg-white text-gray-700 border border-gray-200 px-4 py-2 rounded-lg hover:bg-gray-50 flex items-center gap-2 shadow-sm transition-all no-print-button"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+              </svg>
+              Print Timetable
+            </button>
+          </div>
+
+          {/* Print Only Header */}
+          <div className="hidden print:block mb-8 border-b pb-4">
+            <h1 className="text-2xl font-bold text-gray-900">JEC TimeTable - Faculty Schedule</h1>
+            <p className="text-sm text-gray-600">Faculty: {user.name}</p>
+          </div>
 
           <div className="mb-6 flex items-center gap-3">
             <label className="text-sm font-medium text-gray-600">
@@ -136,7 +157,7 @@ export default function FacultyTimetable() {
                     key={week?._id || "unknown"}
                     className="bg-white rounded-xl shadow-sm border mb-8 overflow-x-auto"
                   >
-                    <div className="p-4 border-b bg-gray-50">
+                    <div className="p-4 border-b bg-gray-50 flex items-center justify-between">
                       <h2 className="font-bold text-gray-700">
                         {week?.department} — Semester{" "}
                         {week?.semester} — Week of{" "}
@@ -146,7 +167,24 @@ export default function FacultyTimetable() {
                             ).toLocaleDateString()
                           : "N/A"}
                       </h2>
+                      <button
+                        onClick={() => printElement(`timetable-${week?._id || "unknown"}`)}
+                        className="text-gray-400 hover:text-indigo-600 p-1.5 rounded-lg hover:bg-white shadow-sm transition-all"
+                        title="Print this week"
+                      >
+                        <Printer size={18} />
+                      </button>
                     </div>
+
+                    <div id={`timetable-${week?._id || "unknown"}`} className="p-4 print:p-0">
+                      {/* Print only watermark/header */}
+                      <div className="hidden print:block mb-4 text-center border-b pb-4">
+                        <h1 className="text-xl font-bold text-indigo-600">JEC TIMETABLE</h1>
+                        <p className="text-sm font-medium text-gray-500">
+                          {week?.department} • Semester {week?.semester} • Week of {new Date(week?.weekStartDate).toLocaleDateString()}
+                        </p>
+                        <p className="text-xs text-gray-400 mt-1">Faculty: {user.name}</p>
+                      </div>
 
                     <table className="w-full border-collapse min-w-[800px]">
                       <thead>
@@ -215,6 +253,7 @@ export default function FacultyTimetable() {
                         ))}
                       </tbody>
                     </table>
+                    </div>
                   </div>
                 );
               }

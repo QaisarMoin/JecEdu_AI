@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import Sidebar from "../components/Navbar";
 import API from "../services/api";
+import { Printer } from "lucide-react";
+import { printElement } from "../utils/printUtils";
 
 const DEFAULT_DEPARTMENT = "IT";
 
@@ -87,9 +89,13 @@ export default function StudentTimetable() {
                         My Class Timetable
                     </h1>
 
-                    <p className="text-gray-500 mb-6">
-                        {department} — Semester {semester || "N/A"}
-                    </p>
+                    <div className="flex justify-between items-center mb-6">
+                        <div>
+                            <p className="text-gray-500">
+                                {department} — Semester {semester || "N/A"}
+                            </p>
+                        </div>
+                    </div>
 
 
                     {/* Week Filter */}
@@ -166,11 +172,38 @@ export default function StudentTimetable() {
                                     })}
                                 </h2>
 
-                                <span className="bg-green-100 text-green-700 text-xs font-semibold px-2.5 py-1 rounded-full">
-                                    ✓ FINALIZED
-                                </span>
+                                <div className="flex items-center gap-3">
+                                    <span className="bg-green-100 text-green-700 text-xs font-semibold px-2.5 py-1 rounded-full">
+                                        ✓ FINALIZED
+                                    </span>
+                                    <button
+                                        onClick={() => printElement("student-timetable-card")}
+                                        className="text-gray-400 hover:text-indigo-600 p-1.5 rounded-lg hover:bg-white shadow-sm transition-all"
+                                        title="Print Timetable"
+                                    >
+                                        <Printer size={18} />
+                                    </button>
+                                </div>
 
                             </div>
+
+                            <div id="student-timetable-card" className="p-4 print:p-0">
+                                {/* Print only watermark/header */}
+                                <div className="hidden print:block mb-6 text-center border-b pb-4">
+                                    <h1 className="text-2xl font-bold text-indigo-600">JEC TIMETABLE</h1>
+                                    <p className="text-base font-medium text-gray-600 mt-1">
+                                        {department} — Semester {semester}
+                                    </p>
+                                    <p className="text-sm text-gray-500 mt-1">
+                                        Week of {new Date(week.weekStartDate).toLocaleDateString("en-IN", {
+                                            weekday: "long",
+                                            year: "numeric",
+                                            month: "long",
+                                            day: "numeric"
+                                        })}
+                                    </p>
+                                    <p className="text-xs text-gray-400 mt-2 italic">Student: {user.name} ({user.email})</p>
+                                </div>
 
                             <table className="w-full border-collapse min-w-[800px]">
 
@@ -270,6 +303,7 @@ export default function StudentTimetable() {
                                 </tbody>
 
                             </table>
+                            </div>
 
                         </div>
 

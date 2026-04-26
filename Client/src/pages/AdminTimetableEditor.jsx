@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Sidebar from "../components/Navbar";
 import API from "../services/api";
+import { printElement } from "../utils/printUtils";
 
 const DAYS = [
   "Monday",
@@ -272,12 +273,28 @@ export default function AdminTimetableEditor() {
             </button>
 
             <button
+              onClick={() => printElement("admin-timetable-grid")}
+              className="bg-white text-gray-700 border border-gray-200 px-4 py-2 rounded-lg hover:bg-gray-50 text-sm font-medium flex items-center gap-2 shadow-sm no-print-button"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+              </svg>
+              Print
+            </button>
+
+            <button
               onClick={() => navigate("/admin/timetable")}
               className="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300 text-sm font-medium"
             >
               ← Back
             </button>
           </div>
+        </div>
+
+        {/* Print Only Header */}
+        <div className="hidden print:block mb-8 border-b pb-4">
+          <h1 className="text-2xl font-bold text-gray-900">JEC TimeTable - {week.department} | Sem {week.semester}</h1>
+          <p className="text-sm text-gray-600">Admin Official Copy | Generated on {new Date().toLocaleDateString()}</p>
         </div>
 
         {/* Clone Section */}
@@ -303,7 +320,7 @@ export default function AdminTimetableEditor() {
 
         {/* Conflicts */}
         {conflicts.length > 0 && (
-          <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+          <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6 no-print">
             <h3 className="text-red-700 font-semibold mb-2">
               ⚠ {conflicts.length} Faculty Conflict(s) Detected
             </h3>
@@ -318,7 +335,18 @@ export default function AdminTimetableEditor() {
         )}
 
         {/* Timetable Grid */}
-        <div className="bg-white rounded-xl shadow-sm border overflow-x-auto">
+        <div id="admin-timetable-grid" className="bg-white rounded-xl shadow-sm border overflow-x-auto print:p-0">
+          {/* Print only watermark/header */}
+          <div className="hidden print:block mb-6 text-center border-b pb-4">
+            <h1 className="text-2xl font-bold text-indigo-600">JEC TIMETABLE</h1>
+            <p className="text-base font-medium text-gray-600 mt-1">
+              {week.department} — Semester {week.semester}
+            </p>
+            <p className="text-sm text-gray-500 mt-1">
+              Week of {new Date(week.weekStartDate).toLocaleDateString()}
+            </p>
+            <p className="text-xs text-gray-400 mt-2 italic">Official Copy | Generated on {new Date().toLocaleDateString()}</p>
+          </div>
           <table className="w-full border-collapse min-w-[900px]">
             <thead>
               <tr className="bg-gray-100">

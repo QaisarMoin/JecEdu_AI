@@ -26,6 +26,7 @@ export default function Sidebar() {
       { to: "/admin/subjects", label: "Subject Management", icon: BookOpen },
       { to: "/notices", label: "Notice Board", icon: Bell },
       { to: "/admin/timetable", label: "Timetable", icon: Calendar },
+      { to: "/assignments", label: "Assignments", icon: FileText },
     ],
     faculty: [
       { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
@@ -41,7 +42,7 @@ export default function Sidebar() {
       { to: "/student/timetable", label: "Class Timetable", icon: Calendar },
       { to: "/attendance", label: "Attendance", icon: ClipboardCheck },
       { to: "/student/dashboard", label: "Attendance Analytics", icon: BarChart },
-    //   { to: "/marks", label: "Marks", icon: GraduationCap },
+      { to: "/assignments", label: "Assignments", icon: FileText },
       { to: "/notices", label: "Notice Board", icon: Bell },
     ],
   };
@@ -92,7 +93,7 @@ export default function Sidebar() {
   };
 
   return (
-    <div className="w-64 h-screen fixed flex flex-col bg-white border-r border-gray-100 shadow-xl shadow-gray-100/50 z-50">
+    <div className="w-64 h-screen fixed flex flex-col bg-white border-r border-gray-100 shadow-xl shadow-gray-100/50 z-50 no-print">
 
       {/* ── Logo / Brand ────────────────── */}
       <div className="px-5 py-5 border-b border-gray-100">

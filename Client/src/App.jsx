@@ -19,6 +19,7 @@ import AdminTimetableGenerator from "./pages/AdminTimetableGenerator";
 import AdminTimetableEditor from "./pages/AdminTimetableEditor";
 import FacultyTimetable from "./pages/FacultyTimetable";
 import StudentTimetable from "./pages/StudentTimetable";
+import Assignments from "./pages/Assignments";
 
 function App() {
 
@@ -134,6 +135,9 @@ function App() {
 
         // Student route
         <Route path="/student/timetable" element={<StudentTimetable />} />
+
+        // Unified Assignments route
+        <Route path="/assignments" element={<ProtectedRoute><Assignments /></ProtectedRoute>} />
       </Routes>
 
     </BrowserRouter>

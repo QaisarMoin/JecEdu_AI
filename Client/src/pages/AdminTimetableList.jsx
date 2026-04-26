@@ -77,7 +77,7 @@ export default function AdminTimetableList() {
 
 
                     {/* Filter */}
-                    <div className="bg-white rounded-xl shadow-sm  p-4 mb-6 flex gap-4 items-center">
+                    <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-6 mb-8 flex gap-4 items-center">
 
                         <span className="text-sm font-medium text-gray-600">
                             Filter by Semester:
@@ -127,15 +127,15 @@ export default function AdminTimetableList() {
 
                     ) : weeks.length === 0 ? (
 
-                        <div className="text-center py-16 bg-white rounded-xl shadow-sm ">
-                            <div className="text-5xl mb-4">📅</div>
-                            <p className="text-xl text-gray-400 mb-2">
+                        <div className="text-center py-20 bg-white rounded-2xl shadow-xl border border-gray-100">
+                            <div className="text-6xl mb-6">📅</div>
+                            <h3 className="text-2xl font-bold text-gray-800 mb-3">
                                 No timetables found
-                            </p>
-                            <p className="text-sm text-gray-300">
+                            </h3>
+                            <p className="text-gray-500 max-w-md mx-auto">
                                 {semester
-                                    ? `No timetables for Semester ${semester}`
-                                    : "Generate a new timetable to get started"
+                                    ? `No timetables for Semester ${semester}. Try another semester or generate a new one.`
+                                    : "You haven't generated any timetables yet. Start by clicking the button above."
                                 }
                             </p>
                         </div>
@@ -149,7 +149,7 @@ export default function AdminTimetableList() {
                                 <div
                                     key={w._id}
                                     onClick={() => navigate(`/admin/timetable/edit/${w._id}`)}
-                                    className="bg-white rounded-xl shadow-sm  p-5 hover:shadow-md hover:border-indigo-200 transition-all cursor-pointer group"
+                                    className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6 hover:shadow-2xl hover:border-indigo-200 transition-all duration-300 cursor-pointer group flex items-center justify-between"
                                 >
 
                                     <div className="flex items-center justify-between">

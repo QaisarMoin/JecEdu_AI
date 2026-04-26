@@ -183,7 +183,7 @@ export default function AdminUsers() {
         </div>
 
         {/* Search & Filter */}
-        <div className="bg-white p-4 rounded-xl shadow-sm flex flex-col md:flex-row gap-4 justify-between mb-6">
+        <div className="bg-white p-6 rounded-2xl shadow-xl border border-gray-100 flex flex-col md:flex-row gap-4 justify-between mb-8">
           <div className="relative w-full md:w-1/2">
             <Search
               size={18}
@@ -211,7 +211,7 @@ export default function AdminUsers() {
         </div>
 
         {/* Table */}
-        <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+        <div className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden mb-12">
           <table className="w-full">
             <thead className="bg-gray-50">
               <tr>

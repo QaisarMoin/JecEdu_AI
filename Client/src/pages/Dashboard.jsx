@@ -786,7 +786,7 @@ const todayDay = date.toLocaleDateString("en-US", {
 
 function Card({ children, className = "" }) {
   return (
-    <div className={`bg-white border border-gray-200/80 rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow duration-300 ${className}`}>
+    <div className={`bg-white border border-gray-100 rounded-2xl p-6 shadow-xl hover:shadow-2xl transition-all duration-300 ${className}`}>
       {children}
     </div>
   );
@@ -805,22 +805,23 @@ function StatCard({ label, value, icon: Icon, color, sub, trend }) {
   const c = colorMap[color] || colorMap.blue;
 
   return (
-    <div className="bg-white border border-gray-200/80 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all duration-300 group">
+    <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-xl hover:shadow-2xl transition-all duration-500 group relative overflow-hidden">
       <div className="flex items-start justify-between">
         <div>
-          <p className="text-xs text-gray-400 font-semibold uppercase tracking-wider">{label}</p>
+          <p className="text-sm text-gray-500 font-medium">{label}</p>
           <div className="flex items-baseline gap-2 mt-2">
-            <p className="text-2xl font-bold text-gray-900">{value}</p>
+            <h3 className="text-2xl font-bold text-gray-900 tracking-tight">{value}</h3>
             {trend && (
-              <span className={`flex items-center text-[10px] font-semibold ${trend === "up" ? "text-emerald-600" : "text-red-500"}`}>
+              <span className={`flex items-center gap-0.5 text-[10px] font-bold px-2 py-1 rounded-full ${trend === "up" ? "bg-emerald-50 text-emerald-600" : "bg-rose-50 text-red-500"}`}>
                 {trend === "up" ? <ArrowUpRight className="w-3 h-3" /> : <ArrowDownRight className="w-3 h-3" />}
+                {trend === "up" ? "12%" : "5%"}
               </span>
             )}
           </div>
-          {sub && <p className="text-[11px] text-gray-400 mt-1.5">{sub}</p>}
+          {sub && <p className="text-[10px] text-gray-400 mt-2 font-medium italic">{sub}</p>}
         </div>
-        <div className={`w-11 h-11 rounded-2xl flex items-center justify-center ${c.bg} ${c.text} ring-1 ${c.ring} group-hover:scale-110 transition-transform duration-300`}>
-          <Icon className="w-5 h-5" />
+        <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${c.bg} ${c.text} shadow-lg transition-transform group-hover:scale-110 duration-300`}>
+          <Icon className="w-6 h-6" />
         </div>
       </div>
     </div>

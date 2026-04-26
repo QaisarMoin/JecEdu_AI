@@ -1,1 +1,78 @@
 @import "tailwindcss";
+
+@media print {
+  @page {
+    size: A4 landscape;
+    margin: 10mm;
+  }
+
+  .no-print,
+  nav,
+  aside,
+  header,
+  .sidebar,
+  .no-print-button,
+  button,
+  [role="navigation"] {
+    display: none !important;
+  }
+
+  .ml-64 {
+    margin-left: 0 !important;
+    padding-left: 0 !important;
+  }
+
+  .p-8, .p-4 {
+    padding: 0 !important;
+  }
+
+  .max-w-7xl, .max-w-6xl {
+    max-width: none !important;
+    width: 100% !important;
+  }
+
+  body, html {
+    background: white !important;
+    height: auto !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .min-h-screen {
+    min-height: auto !important;
+  }
+
+  .shadow-sm, .shadow-md, .shadow-lg, .shadow-xl, .shadow-2xl {
+    box-shadow: none !important;
+  }
+
+  .border {
+    border: 1px solid #e5e7eb !important;
+  }
+
+  /* Table optimizations for landscape fit */
+  table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+    table-layout: fixed !important;
+    font-size: 9pt !important;
+  }
+
+  th, td {
+    word-wrap: break-word !important;
+    overflow: visible !important;
+    padding: 4px !important;
+  }
+
+  .h-20, .h-24 {
+    height: auto !important;
+    min-height: 50px !important;
+  }
+
+  /* Force background colors in print */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+}

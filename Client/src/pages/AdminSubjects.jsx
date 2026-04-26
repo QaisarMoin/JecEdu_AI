@@ -210,7 +210,7 @@ export default function AdminSubjects() {
 
         {/* Create Subject Form */}
         {showForm && (
-          <div className="mb-8 bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden">
+          <div className="mb-10 bg-white border border-gray-100 rounded-2xl shadow-2xl overflow-hidden animate-in slide-in-from-top-4 duration-300">
             <div className="bg-gradient-to-r from-indigo-600 to-blue-600 px-6 py-4">
               <h2 className="text-lg font-semibold text-white flex items-center gap-2">
                 <svg
@@ -578,7 +578,7 @@ export default function AdminSubjects() {
         </div>
 
         {/* Subjects List */}
-        <div className="bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden">
+        <div className="bg-white border border-gray-100 rounded-2xl shadow-xl overflow-hidden mb-12">
           {/* List Header */}
           <div className="px-6 py-5 border-b border-gray-100">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
