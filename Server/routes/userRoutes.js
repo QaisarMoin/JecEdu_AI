@@ -85,6 +85,14 @@ router.get(
 );
 
 
+router.put(
+    "/:id",
+    verifyToken,
+    authorizeRoles("admin"),
+    userController.updateUser
+);
+
+
 router.delete(
     "/:id",
     verifyToken,

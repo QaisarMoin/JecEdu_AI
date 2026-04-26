@@ -106,3 +106,33 @@ exports.deleteUser = async (req, res) => {
     }
 
 };
+
+
+// UPDATE USER
+exports.updateUser = async (req, res) => {
+    try {
+        const { name, email, password, role, rollNo, department, semester } = req.body;
+        const updateData = { name, email, role, rollNo, department, semester };
+
+        if (password) {
+            updateData.password = await bcrypt.hash(password, 10);
+        }
+
+        const user = await User.findByIdAndUpdate(
+            req.params.id,
+            updateData,
+            { new: true, runValidators: true }
+        ).select("-password");
+
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        res.json({
+            message: "User updated successfully",
+            user
+        });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};

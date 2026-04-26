@@ -9,6 +9,7 @@ export default function AdminUsers() {
   const [loading, setLoading] = useState(false);
 
   const [showModal, setShowModal] = useState(false);
+  const [editingUser, setEditingUser] = useState(null);
   const [search, setSearch] = useState("");
   const [roleFilter, setRoleFilter] = useState("all");
 
@@ -68,48 +69,70 @@ export default function AdminUsers() {
   };
 
   const createUser = async () => {
-  try {
-    if (!form.name || !form.email || !form.password) {
-      return alert("Please fill all required fields");
+    try {
+      if (!form.name || !form.email || (!editingUser && !form.password)) {
+        return alert("Please fill all required fields");
+      }
+
+      if (form.role === "student" && !form.rollNo) {
+        return alert("Roll Number is required for students");
+      }
+
+      const payload = {
+        name: form.name,
+        email: form.email,
+        role: form.role,
+        department: form.department,
+      };
+
+      if (form.password) {
+        payload.password = form.password;
+      }
+
+      if (form.role === "student") {
+        payload.rollNo = form.rollNo;
+        payload.semester = form.semester;
+      }
+
+      if (editingUser) {
+        await API.put(`/users/${editingUser._id}`, payload);
+        alert("User updated successfully");
+      } else {
+        await API.post("/users", payload);
+        alert("User created successfully");
+      }
+
+      setShowModal(false);
+      setEditingUser(null);
+      setForm({
+        name: "",
+        email: "",
+        password: "",
+        role: "student",
+        rollNo: "",
+        department: "",
+        semester: ""
+      });
+
+      fetchUsers();
+    } catch (err) {
+      alert(err.response?.data?.message || `Error ${editingUser ? "updating" : "creating"} user`);
     }
+  };
 
-    if (form.role === "student" && !form.rollNo) {
-      return alert("Roll Number is required for students");
-    }
-
-    const payload = {
-      name: form.name,
-      email: form.email,
-      password: form.password,
-      role: form.role,
-      department: form.department, // now common for all
-    };
-
-    if (form.role === "student") {
-      payload.rollNo = form.rollNo;
-      payload.semester = form.semester;
-    }
-
-    await API.post("/users", payload);
-
-    setShowModal(false);
-
+  const handleEdit = (user) => {
+    setEditingUser(user);
     setForm({
-      name: "",
-      email: "",
-      password: "",
-      role: "student",
-      rollNo: "",
-      department: "",
-      semester: ""
+      name: user.name,
+      email: user.email,
+      password: "", // password optional on edit
+      role: user.role,
+      rollNo: user.rollNo || "",
+      department: user.department || "",
+      semester: user.semester || ""
     });
-
-    fetchUsers();
-
-  } catch (err) {
-    alert(err.response?.data?.message || "Error creating user");
-  }
-};
+    setShowModal(true);
+  };
 
   const deleteUser = async (id) => {
     if (!window.confirm("Delete this user?")) return;
@@ -140,7 +163,19 @@ export default function AdminUsers() {
           </div>
 
           <button
-            onClick={() => setShowModal(true)}
+            onClick={() => {
+              setEditingUser(null);
+              setForm({
+                name: "",
+                email: "",
+                password: "",
+                role: "student",
+                rollNo: "",
+                department: "",
+                semester: ""
+              });
+              setShowModal(true);
+            }}
             className="bg-indigo-600 text-white px-5 py-2.5 rounded-lg hover:bg-indigo-700"
           >
             + Add New User
@@ -201,7 +236,13 @@ export default function AdminUsers() {
                   <td className="px-6 py-4">{user.name}</td>
                   <td className="px-6 py-4 text-gray-500">{user.email}</td>
                   <td className="px-6 py-4 capitalize">{user.role}</td>
-                  <td className="px-6 py-4 text-right">
+                  <td className="px-6 py-4 text-right flex justify-end gap-3">
+                    <button
+                      onClick={() => handleEdit(user)}
+                      className="text-indigo-600 hover:text-indigo-800 font-medium"
+                    >
+                      Edit
+                    </button>
                     <button
                       onClick={() => deleteUser(user._id)}
                       className="text-red-600 hover:text-red-800"
@@ -238,7 +279,7 @@ export default function AdminUsers() {
   <div className="fixed inset-0 backdrop-blur-md bg-black/30 flex justify-center items-center z-50 p-4">
     <div className="bg-white p-8 rounded-2xl w-full max-w-md shadow-2xl overflow-y-auto max-h-[90vh]">
       <h2 className="text-xl font-semibold mb-4">
-        Create New User
+        {editingUser ? "Edit User" : "Create New User"}
       </h2>
 
       <div className="space-y-4">
@@ -265,7 +306,9 @@ export default function AdminUsers() {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Password *</label>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Password {editingUser ? "(leave blank to keep current)" : "*"}
+          </label>
           <input
             name="password"
             type="password"
@@ -347,7 +390,7 @@ export default function AdminUsers() {
           onClick={createUser}
           className="px-5 py-2.5 bg-indigo-600 text-white font-medium rounded-lg hover:bg-indigo-700 shadow-lg shadow-indigo-200 transition-all"
         >
-          Create User
+          {editingUser ? "Update User" : "Create User"}
         </button>
       </div>
     </div>
