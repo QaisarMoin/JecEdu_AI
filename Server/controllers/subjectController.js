@@ -118,3 +118,43 @@ exports.getStudentSubjects = async (req, res) => {
     }
 
 };
+
+
+// UPDATE SUBJECT (Admin)
+exports.updateSubject = async (req, res) => {
+    try {
+        const { name, code, faculty, department, semester } = req.body;
+        const subject = await Subject.findByIdAndUpdate(
+            req.params.id,
+            { name, code, faculty, department, semester },
+            { new: true, runValidators: true }
+        ).populate("faculty", "name email");
+
+        if (!subject) {
+            return res.status(404).json({ message: "Subject not found" });
+        }
+
+        res.json({
+            message: "Subject updated successfully",
+            subject
+        });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+
+// DELETE SUBJECT (Admin)
+exports.deleteSubject = async (req, res) => {
+    try {
+        const subject = await Subject.findByIdAndDelete(req.params.id);
+
+        if (!subject) {
+            return res.status(404).json({ message: "Subject not found" });
+        }
+
+        res.json({ message: "Subject deleted successfully" });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};

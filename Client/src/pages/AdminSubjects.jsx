@@ -9,6 +9,7 @@ export default function AdminSubjects() {
   const [creating, setCreating] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const [editingSubject, setEditingSubject] = useState(null);
 
   const [form, setForm] = useState({
     name: "",
@@ -61,14 +62,46 @@ export default function AdminSubjects() {
     e.preventDefault();
     setCreating(true);
     try {
-      await API.post("/subjects", form);
+      if (editingSubject) {
+        await API.put(`/subjects/${editingSubject._id}`, form);
+        alert("Subject updated successfully");
+      } else {
+        await API.post("/subjects", form);
+        alert("Subject created successfully");
+      }
       setForm({ name: "", code: "", faculty: "", department: "", semester: "" });
       setShowForm(false);
+      setEditingSubject(null);
       fetchSubjects();
     } catch {
-      alert("Error creating subject");
+      alert(editingSubject ? "Error updating subject" : "Error creating subject");
     } finally {
       setCreating(false);
+    }
+  };
+
+  const handleEdit = (subject) => {
+    setEditingSubject(subject);
+    setForm({
+      name: subject.name,
+      code: subject.code,
+      faculty: subject.faculty?._id || subject.faculty || "",
+      department: subject.department,
+      semester: subject.semester,
+    });
+    setShowForm(true);
+    // Scroll to form
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const handleDelete = async (id) => {
+    if (window.confirm("Are you sure you want to delete this subject?")) {
+      try {
+        await API.delete(`/subjects/${id}`);
+        fetchSubjects();
+      } catch {
+        alert("Error deleting subject");
+      }
     }
   };
 
@@ -151,7 +184,7 @@ export default function AdminSubjects() {
                       d="M6 18L18 6M6 6l12 12"
                     />
                   </svg>
-                  Cancel
+                  {editingSubject ? "Cancel Edit" : "Cancel"}
                 </>
               ) : (
                 <>
@@ -193,10 +226,10 @@ export default function AdminSubjects() {
                     d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
                   />
                 </svg>
-                Create New Subject
+                {editingSubject ? "Edit Subject" : "Create New Subject"}
               </h2>
               <p className="text-indigo-100 text-sm mt-1">
-                Fill in the details below to add a new subject
+                {editingSubject ? "Update the details of the existing subject" : "Fill in the details below to add a new subject"}
               </p>
             </div>
 
@@ -415,7 +448,7 @@ export default function AdminSubjects() {
                           d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                         />
                       </svg>
-                      Creating...
+                      {editingSubject ? "Updating..." : "Creating..."}
                     </>
                   ) : (
                     <>
@@ -432,7 +465,7 @@ export default function AdminSubjects() {
                           d="M5 13l4 4L19 7"
                         />
                       </svg>
-                      Create Subject
+                      {editingSubject ? "Update Subject" : "Create Subject"}
                     </>
                   )}
                 </button>
@@ -440,6 +473,7 @@ export default function AdminSubjects() {
                   type="button"
                   onClick={() => {
                     setShowForm(false);
+                    setEditingSubject(null);
                     setForm({
                       name: "",
                       code: "",
@@ -668,6 +702,9 @@ export default function AdminSubjects() {
                     <th className="text-left px-6 py-3.5 text-xs font-semibold text-gray-500 uppercase tracking-wider">
                       Semester
                     </th>
+                    <th className="text-right px-6 py-3.5 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                      Actions
+                    </th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100">
@@ -733,6 +770,48 @@ export default function AdminSubjects() {
                         >
                           Sem {subject.semester}
                         </span>
+                      </td>
+                      <td className="px-6 py-4 text-right">
+                        <div className="flex items-center justify-end gap-2">
+                          <button
+                            onClick={() => handleEdit(subject)}
+                            className="p-1.5 text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors shadow-sm"
+                            title="Edit Subject"
+                          >
+                            <svg
+                              className="w-5 h-5"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                              />
+                            </svg>
+                          </button>
+                          <button
+                            onClick={() => handleDelete(subject._id)}
+                            className="p-1.5 text-red-600 hover:bg-red-50 rounded-lg transition-colors shadow-sm"
+                            title="Delete Subject"
+                          >
+                            <svg
+                              className="w-5 h-5"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                              />
+                            </svg>
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   ))}

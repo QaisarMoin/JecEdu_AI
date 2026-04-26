@@ -45,4 +45,21 @@ router.get(
 );
 
 
+// update subject (admin only)
+router.put(
+    "/:id",
+    verifyToken,
+    authorizeRoles("admin"),
+    subjectController.updateSubject
+);
+
+// delete subject (admin only)
+router.delete(
+    "/:id",
+    verifyToken,
+    authorizeRoles("admin"),
+    subjectController.deleteSubject
+);
+
+
 module.exports = router;
