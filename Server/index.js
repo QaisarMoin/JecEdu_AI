@@ -27,6 +27,7 @@ console.log("MONGO_URI:", process.env.MONGO_URI);
 mongoose.connect(process.env.MONGO_URI)
 .then(() => {
     console.log("MongoDB Connected Successfully");
+    console.log(process.env.MONGO_URI);
 })
 .catch((err) => {
     console.log("MongoDB Connection Error:");
