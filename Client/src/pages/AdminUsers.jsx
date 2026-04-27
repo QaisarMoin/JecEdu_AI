@@ -337,7 +337,7 @@ export default function AdminUsers() {
           <label className="block text-sm font-medium text-gray-700 mb-1">Department</label>
           <input
             name="department"
-            value={form.department}
+            value={form.department.trim()}
             placeholder="e.g. Computer Science"
             onChange={handleChange}
             className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:bg-white transition-all outline-none text-sm"

@@ -62,6 +62,8 @@ export default function FacultyAttendance() {
 
       await checkAttendanceStatus(subjectId, selectedDate);
 
+      
+
       const res = await API.get(
         `/users/students?department=${subject.department}&semester=${subject.semester}`
       );
