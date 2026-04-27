@@ -264,7 +264,7 @@ function AdminDashboard({ data, navigate }) {  // ← accept navigate
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
         {/* Department Distribution */}
-        <Card>
+        {/* <Card>
           <SectionTitle icon={PieChart} title="Department Distribution" count={departmentStats.length} />
           {departmentStats.length === 0 ? (
             <EmptyState text="No student data" icon={Users} />
@@ -293,14 +293,14 @@ function AdminDashboard({ data, navigate }) {  // ← accept navigate
               })}
             </div>
           )}
-        </Card>
+        </Card> */}
 
         {/* Recent Notices — with "View All" button + clickable items */}
-        <Card className="lg:col-span-2">
+        <Card className="lg:col-span-3">
           <SectionTitle
             icon={Megaphone} title="Recent Notices"
             count={data.notices.length}
-            action={{ label: "View All", onClick: () => navigate("/admin/notices") }}
+            action={{ label: "View All", onClick: () => navigate("/notices") }}
           />
           {data.notices.length === 0 ? (
             <EmptyState text="No notices posted" icon={Bell} />
