@@ -61,116 +61,99 @@ export default function Login() {
           </div>
         </div>
 
-        <div className="relative z-10 flex flex-col justify-center items-center w-full px-16 text-white">
-          {/* Department Icon */}
-          <div className="mb-8">
-            <div className="w-24 h-24 bg-white/10 backdrop-blur-sm rounded-2xl flex items-center justify-center border border-white/20 shadow-2xl">
-              <svg
-                className="w-14 h-14 text-cyan-300"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={1.5}
-                  d="M12 14l9-5-9-5-9 5 9 5z"
-                />
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={1.5}
-                  d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"
-                />
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={1.5}
-                  d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222"
-                />
-              </svg>
+        <div className="relative z-10 flex flex-col justify-between items-center w-full px-16 py-12 text-white">
+          {/* Top Section - Logo & Title */}
+          <div className="flex flex-col items-center">
+            {/* Department Icon */}
+            <div className="mb-8">
+              <div className="w-24 h-24 bg-white/10 backdrop-blur-sm rounded-2xl flex items-center justify-center border border-white/20 shadow-2xl">
+                <svg
+                  className="w-14 h-14 text-cyan-300"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={1.5}
+                    d="M12 14l9-5-9-5-9 5 9 5z"
+                  />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={1.5}
+                    d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"
+                  />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={1.5}
+                    d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222"
+                  />
+                </svg>
+              </div>
             </div>
+
+            <h1 className="text-4xl font-bold text-center mb-4 leading-tight">
+              Department
+              <br />
+              <span className="text-cyan-300">Management Portal</span>
+            </h1>
+
+            <p className="text-blue-200/80 text-center text-lg max-w-md leading-relaxed mb-8">
+              Streamline your departmental operations with our comprehensive
+              management system.
+            </p>
           </div>
 
-          <h1 className="text-4xl font-bold text-center mb-4 leading-tight">
-            Department
-            <br />
-            <span className="text-cyan-300">Management Portal</span>
-          </h1>
-
-          <p className="text-blue-200/80 text-center text-lg max-w-md leading-relaxed mb-12">
-            Streamline your departmental operations with our comprehensive
-            management system. Access resources, manage tasks, and collaborate
-            efficiently.
-          </p>
-
-          {/* Feature Highlights */}
-          <div className="space-y-4 w-full max-w-sm">
-            {[
-              {
-                icon: (
-                  <svg
-                    className="w-5 h-5"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
-                    />
-                  </svg>
-                ),
-                text: "Secure & Encrypted Access",
-              },
-              {
-                icon: (
-                  <svg
-                    className="w-5 h-5"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
-                    />
-                  </svg>
-                ),
-                text: "Team Collaboration Tools",
-              },
-              {
-                icon: (
-                  <svg
-                    className="w-5 h-5"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
-                    />
-                  </svg>
-                ),
-                text: "Real-time Analytics & Reports",
-              },
-            ].map((feature, i) => (
-              <div
-                key={i}
-                className="flex items-center gap-3 bg-white/5 backdrop-blur-sm rounded-xl px-5 py-3 border border-white/10"
-              >
-                <div className="text-cyan-300 flex-shrink-0">{feature.icon}</div>
-                <span className="text-blue-100 text-sm">{feature.text}</span>
+          {/* ── Bottom Section - Team Credits (Desktop) ──────────────── */}
+          <div className="w-full max-w-sm mt-10">
+            <div className="bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 p-5">
+              {/* Guidance */}
+              <div className="text-center mb-4">
+                <p className="text-blue-300/70 text-xs font-medium uppercase tracking-widest mb-1">
+                  Under the Guidance of
+                </p>
+                <p className="text-cyan-200 font-semibold text-sm">
+                  Dr. Mamta Lambert
+                </p>
               </div>
-            ))}
+
+              {/* Divider */}
+              <div className="border-t border-white/10 my-3"></div>
+
+              {/* Developed By */}
+              <div className="text-center">
+                <p className="text-blue-300/70 text-xs font-medium uppercase tracking-widest mb-3">
+                  Developed by Batch 2022 - 2026
+                </p>
+                <div className="space-y-2">
+                  {[
+                    { name: "Arpit Jain(025)", id: "8827557009" },
+                    { name: "Mohd. Qaisar Moin(065)", id: "8602115206" },
+                    { name: "Arun Mishra(027)", id: "9343642418" },
+                  ].map((member, i) => (
+                    <div
+                      key={i}
+                      className="flex items-center justify-between bg-white/5 rounded-lg px-4 py-2"
+                    >
+                      <div className="flex items-center gap-2">
+                        <div className="w-6 h-6 bg-gradient-to-br from-cyan-400 to-blue-500 rounded-full flex items-center justify-center text-[10px] font-bold text-white flex-shrink-0">
+                          {member.name.charAt(0)}
+                        </div>
+                        <span className="text-blue-100 text-sm font-medium">
+                          {member.name}
+                        </span>
+                      </div>
+                      <span className="text-blue-300/60 text-xs font-mono">
+                        {member.id}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -436,6 +419,55 @@ export default function Login() {
                     support@department.edu
                   </a>
                 </p>
+              </div>
+            </div>
+          </div>
+
+          {/* ── Mobile Team Credits (visible only on small screens) ── */}
+          <div className="lg:hidden mt-8">
+            <div className="bg-gradient-to-br from-indigo-50 to-blue-50 border border-indigo-100 rounded-2xl p-5">
+              {/* Guidance */}
+              <div className="text-center mb-4">
+                <p className="text-indigo-400 text-[10px] sm:text-xs font-semibold uppercase tracking-widest mb-1">
+                  Under the Guidance of
+                </p>
+                <p className="text-indigo-800 font-bold text-sm sm:text-base">
+                  Dr. Mamta Lambert
+                </p>
+              </div>
+
+              {/* Divider */}
+              <div className="border-t border-indigo-200/50 my-3"></div>
+
+              {/* Developed By */}
+              <div className="text-center">
+                <p className="text-indigo-400 text-[10px] sm:text-xs font-semibold uppercase tracking-widest mb-3">
+                  Developed by
+                </p>
+                <div className="space-y-2">
+                  {[
+                    { name: "Arpit Jain", id: "0201IT221025" },
+                    { name: "Mohd. Qaisar Moin", id: "0201IT221065" },
+                    { name: "Arun Mishra", id: "0201IT221027" },
+                  ].map((member, i) => (
+                    <div
+                      key={i}
+                      className="flex items-center justify-between bg-white/70 rounded-lg px-3 sm:px-4 py-2.5 border border-indigo-100"
+                    >
+                      <div className="flex items-center gap-2">
+                        <div className="w-7 h-7 sm:w-8 sm:h-8 bg-gradient-to-br from-indigo-500 to-blue-600 rounded-full flex items-center justify-center text-[10px] sm:text-xs font-bold text-white flex-shrink-0 shadow-sm">
+                          {member.name.charAt(0)}
+                        </div>
+                        <span className="text-gray-800 text-xs sm:text-sm font-medium">
+                          {member.name}
+                        </span>
+                      </div>
+                      <span className="text-indigo-400 text-[10px] sm:text-xs font-mono">
+                        {member.id}
+                      </span>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
