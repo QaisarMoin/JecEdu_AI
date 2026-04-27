@@ -446,9 +446,9 @@ export default function Login() {
                 </p>
                 <div className="space-y-2">
                   {[
-                    { name: "Arpit Jain", id: "0201IT221025" },
-                    { name: "Mohd. Qaisar Moin", id: "0201IT221065" },
-                    { name: "Arun Mishra", id: "0201IT221027" },
+                    { name: "Arpit Jain(025)", id: "8827557009" },
+                    { name: "Mohd. Qaisar Moin(065)", id: "8602115206" },
+                    { name: "Arun Mishra(027)", id: "9343642418" },
                   ].map((member, i) => (
                     <div
                       key={i}
